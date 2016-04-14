@@ -4,11 +4,12 @@
 #include "settings.h"
 
 //(nothing / neuron / axon / dendrite) (0/1/2/3)
-#define NOTHING    0
-#define NEURON     1
-#define AXON       2
-#define	DENDRITE   3
-#define GROWTHCONE 4
+#define NOTHING		0
+#define NEURON		1
+#define AXON		2
+#define	DENDRITE	3
+#define GROWTHCONE	4
+#define ENVIRONMENT	5
 
 #define dynamicArrayRealloc(type, arrayName, numberOfElements)      \
 	type *tmpArrayName;                                             \

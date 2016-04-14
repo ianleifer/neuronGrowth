@@ -14,9 +14,10 @@ OpenGLInterface::OpenGLInterface() {
 	fullscreen = false;
 	
 	//CreateGLWindow(L"OpenGL window", 800, 600, 32, fullscreen);
-	CreateGLWindow(L"OpenGL window", NUMBEROFCELLSX, NUMBEROFCELLSY, 32, fullscreen);
+	CreateGLWindow(L"OpenGL window", NUMBEROFCELLSX * PICTURESCALEX, NUMBEROFCELLSY * PICTURESCALEY, 32, fullscreen);
 
 	hippocampus = hippocampus->getHippocampus();
+	environment = environment->getEnvironment();
 	for(int i = 0; i < NUMBEROFCELLSX; i++)
 		for(int j = 0; j < NUMBEROFCELLSY; j++)
 			picture[i][j] = NOTHING;
@@ -287,22 +288,18 @@ LRESULT CALLBACK OpenGLInterface::StaticWndProc(HWND hWnd, UINT Msg, WPARAM wPar
       return this_window->WndProc(hWnd, Msg, wParam, lParam);
 }
 
-void OpenGLInterface::getHippocampusCoordinates() {
+void OpenGLInterface::getFields() {
 	for(int i = 0; i < NUMBEROFCELLSX; i++)
 		for(int j = 0; j < NUMBEROFCELLSY; j++)
 			picture[i][j] = hippocampus->getFieldType(i, j);
+
+	for(int x = 0; x < NUMBEROFCELLSX; x++)
+		for(int y = 0; y < NUMBEROFCELLSY; y++)
+			for(int type = 0; type < NUMBEROFNEURONTYPES; type++)
+				environmentField[x][y][type] = environment->getField(x, y, type);
 }
 
 void OpenGLInterface::printEnvironment() {
-	#if defined(DIFFUSIONVISIBLE) || defined(ENVIRONMENTSTATISTICS)
-		Environment *environment;
-		environment = environment->getEnvironment();
-		for(int x = 0; x < NUMBEROFCELLSX; x++)
-			for(int y = 0; y < NUMBEROFCELLSY; y++)
-				for(int type = 0; type < NUMBEROFNEURONTYPES; type++)
-					environmentField[x][y][type] = environment->getField(x, y, type);
-	#endif
-
 	#ifdef DIFFUSIONVISIBLE
 		for(int type = 0; type < NUMBEROFNEURONTYPES; type++) {
 			printf("Type %d:\n", type);
@@ -335,17 +332,29 @@ void OpenGLInterface::printEnvironment() {
 
 void OpenGLInterface::printPicture() {
     glLoadIdentity();
+	glEnable(GL_ALPHA_TEST);
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_DST_ALPHA);
+
 	for(int j = 0; j < NUMBEROFCELLSY; j++)
-		for(int i = 0; i < NUMBEROFCELLSX; i++) {
+		for(int i = 0; i < NUMBEROFCELLSX; i++)
 			drawPixel(i, j, picture[i][j]);
-		}
+	
+	for(int type = 0; type < NUMBEROFNEURONTYPES; type++)
+		for(int j = 0; j < NUMBEROFCELLSY; j++)
+			for(int i = 0; i < NUMBEROFCELLSX; i++)
+				drawPixel(i, j, ENVIRONMENT, type, environmentField[i][j][type]);
+	
+	glDisable(GL_BLEND);
+	glDisable(GL_ALPHA_TEST);
 	SwapBuffers(hDC);
+
 #ifdef STEPBYSTEP
 	system("pause");
 #endif
 }
 
-void OpenGLInterface::drawPixel(int x, int y, int type) {
+void OpenGLInterface::drawPixel(int x, int y, int type, int environmentType, double intensity) {
     glLoadIdentity();
 	switch(type) {
 	case NOTHING:
@@ -360,8 +369,18 @@ void OpenGLInterface::drawPixel(int x, int y, int type) {
 	case DENDRITE:
 		glColor3f(1, 0, 0);
 		break;
+	case ENVIRONMENT:
+		switch(environmentType) {
+		case 0:
+			glColor3f(0, 0, 10 * intensity);
+			break;
+		case 1:
+			glColor3f(0, 10 * intensity, 0);
+			break;
+		}
+		break;
 	default:
-		glColor3f(0, 0, 1);
+		glColor3f(0, 0, 0);
 	}
 	double X = 2 * double(x) / NUMBEROFCELLSX;
 	double Y = 2 * double(y) / NUMBEROFCELLSY;
@@ -377,7 +396,7 @@ void OpenGLInterface::drawPixel(int x, int y, int type) {
 }
 
 void OpenGLInterface::tick() {
-	getHippocampusCoordinates();
+	getFields();
 	printEnvironment();
 	printPicture();
 }

@@ -56,6 +56,7 @@ void Output::printToFile(int outputFile, std::string trace) {
 	2 - Growth cone
 	3 - Connection
 	4 - Cell stack
+	5 - Error traces
 */
 #define TG(tgIx) (1 << tgIx)
 void Output::enterFunctionTrace(std::string fileName, std::string trace) {
@@ -86,6 +87,11 @@ void Output::printTrace(std::string fileName, std::string trace, int traceGroup)
 			#endif
 		#endif
 	}
+	if(traceGroup == TG(5)) {
+		#ifdef STOPONERROR
+			system("pause");
+		#endif
+	}
 }
 
 bool Output::isPrintingEnabled(int traceGroup) {
@@ -105,10 +111,14 @@ bool Output::isPrintingEnabled(int traceGroup) {
 	if(traceGroup & TG(4)) {
 	//	printf("Cell stack\n");
 	}
+	if(traceGroup & TG(5)) {
+		enabled = true;
+	//	printf("Error traces\n");
+	}
 	return enabled;
 }
 
 void Output::printErrorTrace(std::string fileName, std::string trace) {
-	std::cout << "Error trace:" << fileName << ".cpp: " << trace << std::endl;
-	system("pause");
+	//std::cout << "Error trace:" << fileName << ".cpp: " << trace << std::endl;
+	printTrace(fileName + ": Error trace", trace, TG(5));
 }

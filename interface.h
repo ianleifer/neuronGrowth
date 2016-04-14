@@ -5,6 +5,7 @@
 #include <glut.h>
 
 #include "hippocampus.h"
+#include "environment.h"
 
 class OpenGLInterface {
 private:
@@ -33,9 +34,10 @@ private:
 	int picture[NUMBEROFCELLSX][NUMBEROFCELLSY];
 
 	Hippocampus* hippocampus;
+	Environment* environment;
 	void printPicture();
-	void drawPixel(int x, int y, int type);
-	void getHippocampusCoordinates();
+	void drawPixel(int x, int y, int type, int environmentType = -1, double intensity = -1);
+	void getFields();
 
 	double environmentField[NUMBEROFCELLSX][NUMBEROFCELLSY][NUMBEROFNEURONTYPES];
 	void printEnvironment();

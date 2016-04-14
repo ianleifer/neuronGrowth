@@ -1,13 +1,6 @@
 #include "processor.h"
 #include "cmn_defines.h"
 
-//For pause
-#include <cstdlib>
-
-#ifdef MEMORYCHECKING
-#include <vld.h>
-#endif
-
 Processor::Processor() {
 	output = output->getOutput();
 	ENTER_FUNCTION("processor", "Processor::Processor()");
@@ -37,5 +30,4 @@ void Processor::Run() {
 		PRINTTRACE("processor", "tick(" + std::to_string(t) + ")");
 		tick(t);
 	}
-	system("pause");
 };

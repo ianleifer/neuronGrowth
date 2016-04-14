@@ -43,10 +43,6 @@ void Neuron::setCoordinates(int x, int y) {//TODO: proper checking of coordinate
 	ENTER_FUNCTION("neuron", "setCoordinates(int x, int y). x = " + std::to_string(x) + ", y = " + std::to_string(y));
 	coord.SetX(x);
 	coord.SetY(y);
-#ifdef NEUROGENESIS
-	if(x > NUMBEROFCELLSX / 2) {neuronType = 1;}
-	else {neuronType = 0;}
-#endif
 
 	PRINTTRACE("neuron", "Coordinates of neuron number " + std::to_string(NeuronId) + " were changed. New coordinates are:");
 	coord.PrintCoordinates();
