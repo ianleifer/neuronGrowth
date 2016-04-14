@@ -338,11 +338,7 @@ void OpenGLInterface::printPicture() {
 	for(int j = 0; j < NUMBEROFCELLSY; j++)
 		for(int i = 0; i < NUMBEROFCELLSX; i++) {
 			drawPixel(i, j, picture[i][j]);
-			if (picture[i][j] == NEURON)  {/*SetPixel(hdc, i, j, neuronColor);*/};
-			if (picture[i][j] == AXON)    {/*SetPixel(hdc, i, j, axonColor);*/};
-			if (picture[i][j] == DENDRITE){/*SetPixel(hdc, i, j, dendriteColor);*/};
 		}
-	//drawPixel(50, 50, 1);
 	SwapBuffers(hDC);
 #ifdef STEPBYSTEP
 	system("pause");
