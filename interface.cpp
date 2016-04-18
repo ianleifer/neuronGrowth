@@ -18,6 +18,7 @@ OpenGLInterface::OpenGLInterface() {
 
 	hippocampus = hippocampus->getHippocampus();
 	environment = environment->getEnvironment();
+	output = output->getOutput();
 	for(int i = 0; i < NUMBEROFCELLSX; i++)
 		for(int j = 0; j < NUMBEROFCELLSY; j++)
 			picture[i][j] = NOTHING;
@@ -313,6 +314,18 @@ void OpenGLInterface::printEnvironment() {
 	#endif
 
 	#ifdef ENVIRONMENTSTATISTICS
+		std::string environment;
+		for(int type = 0; type < NUMBEROFNEURONTYPES; type++) {
+			environment = "\n" + std::to_string(type);
+			for(int y = 0; y < NUMBEROFCELLSY; y++) {
+				for(int x = 0; x < NUMBEROFCELLSX; x++)
+					environment += std::to_string(environmentField[x][y][type]) + " ";
+				environment += "\n";
+			}
+			environment += "\n";
+		}
+		PRINTSTATISTICS(ENVIRONMENTSTATISTICSFILEID, environment);
+		/*
 		FILE *file;
 		fopen_s(&file, ENVIRONMENTSTATISTICSFILE, "a");
 		fprintf(file, "\n");
@@ -326,7 +339,7 @@ void OpenGLInterface::printEnvironment() {
 			}
 			fprintf(file, "\n");
 		}
-		fclose(file);
+		fclose(file);*/
 	#endif
 }
 

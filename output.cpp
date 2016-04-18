@@ -38,13 +38,19 @@ void Output::printToFile(int outputFile, std::string trace) {
 		break;
 #ifdef STATISTICSON
 	case LENGTHSTATISTICKSFILEID:
-		lenghtStatisticsFile << trace << std::endl;
+		#ifdef LENGTHSTATISTICS
+			lenghtStatisticsFile << trace << std::endl;
+		#endif
 		break;
 	case CONNECTIVITYGRAPHSTATICSFILEID:
-		connectivityGraphStatisticsFile << trace << std::endl;
+		#ifdef CONNECTIVITYGRAPHSTATISTICS
+			connectivityGraphStatisticsFile << trace << std::endl;
+		#endif
 		break;
 	case ENVIRONMENTSTATISTICSFILEID:
-		environmentStatisticsFile << trace << std::endl;
+		#ifdef ENVIRONMENTSTATISTICS
+				environmentStatisticsFile << trace << std::endl;
+		#endif
 		break;
 #endif
 	}

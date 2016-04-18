@@ -6,6 +6,7 @@
 
 #include "hippocampus.h"
 #include "environment.h"
+#include "output.h"
 
 class OpenGLInterface {
 private:
@@ -35,6 +36,7 @@ private:
 
 	Hippocampus* hippocampus;
 	Environment* environment;
+	Output *output;
 	void printPicture();
 	void drawPixel(int x, int y, int type, int environmentType = -1, double intensity = -1);
 	void getFields();
