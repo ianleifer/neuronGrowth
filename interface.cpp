@@ -301,18 +301,6 @@ void OpenGLInterface::getFields() {
 }
 
 void OpenGLInterface::printEnvironment() {
-	#ifdef DIFFUSIONVISIBLE
-		for(int type = 0; type < NUMBEROFNEURONTYPES; type++) {
-			printf("Type %d:\n", type);
-			for(int y = 0; y < NUMBEROFCELLSY; y++) {
-				for(int x = 0; x < NUMBEROFCELLSX; x++)
-					printf("%.3f ", environmentField[x][y][type]);
-				printf("\n");
-			}
-			printf("\n");
-		}
-	#endif
-
 	#ifdef ENVIRONMENTSTATISTICS
 		std::string environment;
 		for(int type = 0; type < NUMBEROFNEURONTYPES; type++) {
@@ -325,21 +313,6 @@ void OpenGLInterface::printEnvironment() {
 			environment += "\n";
 		}
 		PRINTSTATISTICS(ENVIRONMENTSTATISTICSFILEID, environment);
-		/*
-		FILE *file;
-		fopen_s(&file, ENVIRONMENTSTATISTICSFILE, "a");
-		fprintf(file, "\n");
-		for(int type = 0; type < NUMBEROFNEURONTYPES; type++) {
-		//	fprintf(file, "Type %d:\n", type);
-			fprintf(file, "\n", type);
-			for(int y = 0; y < NUMBEROFCELLSY; y++) {
-				for(int x = 0; x < NUMBEROFCELLSX; x++)
-					fprintf(file, "%.3f ", environmentField[x][y][type]);
-				fprintf(file, "\n");
-			}
-			fprintf(file, "\n");
-		}
-		fclose(file);*/
 	#endif
 }
 
@@ -353,10 +326,12 @@ void OpenGLInterface::printPicture() {
 		for(int i = 0; i < NUMBEROFCELLSX; i++)
 			drawPixel(i, j, picture[i][j]);
 	
-	for(int type = 0; type < NUMBEROFNEURONTYPES; type++)
-		for(int j = 0; j < NUMBEROFCELLSY; j++)
-			for(int i = 0; i < NUMBEROFCELLSX; i++)
-				drawPixel(i, j, ENVIRONMENT, type, environmentField[i][j][type]);
+	#ifdef DIFFUSIONVISIBLE
+		for(int type = 0; type < NUMBEROFNEURONTYPES; type++)
+			for(int j = 0; j < NUMBEROFCELLSY; j++)
+				for(int i = 0; i < NUMBEROFCELLSX; i++)
+					drawPixel(i, j, ENVIRONMENT, type, environmentField[i][j][type]);
+	#endif
 	
 	glDisable(GL_BLEND);
 	glDisable(GL_ALPHA_TEST);
