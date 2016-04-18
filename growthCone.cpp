@@ -13,7 +13,7 @@ GrowthCone::GrowthCone() {
 void GrowthCone::setCoordinates(Coordinates coord) {
 	ENTER_FUNCTION("growthCone", "setCoordinates(Coordinates coord)");
 	coordinates = coord;
-	PRINTTRACE("growthCone", "Coordinates now are:");
+	PRINTTRACETG("growthCone", "Coordinates now are:", TG(2));
 	coordinates.PrintCoordinates();
 };
 
@@ -56,7 +56,7 @@ void GrowthCone::setDirection(double direct) {
 void GrowthCone::increaseSomaDistance(double delta) {
 	ENTER_FUNCTION("growthCone", "increaseSomaDistance(double delta). delta = " + std::to_string(delta));
 	somaDistance += delta;
-	PRINTTRACE("growthCone", "Soma distance is " + std::to_string(somaDistance) + " now");
+	PRINTTRACETG("growthCone", "Soma distance is " + std::to_string(somaDistance) + " now", TG(2));
 };
 
 void GrowthCone::increaseCentrifugalOrder() {
@@ -64,7 +64,7 @@ void GrowthCone::increaseCentrifugalOrder() {
 	centrifugalOrder++;
 	previousLevelLength = somaDistance;
 
-	PRINTTRACE("growthCone", "Centrifugal order is now " + std::to_string(centrifugalOrder) + ". previousLevelLength is " + std::to_string(previousLevelLength));
+	PRINTTRACETG("growthCone", "Centrifugal order is now " + std::to_string(centrifugalOrder) + ". previousLevelLength is " + std::to_string(previousLevelLength), TG(2));
 };
 
 /*****************
@@ -108,6 +108,6 @@ int GrowthCone::getNeuronType() {
 void GrowthCone::printStats() {
 	ENTER_FUNCTION("growthCone", "printStats()");
 
-	PRINTTRACE("growthCone", "Growth cone stats. Soma distance = " + std::to_string(getSomaDistance()) + ", centrifugalOrder = " + std::to_string(centrifugalOrder) + " and coordinates are:");
+	PRINTTRACETG("growthCone", "Growth cone stats. Soma distance = " + std::to_string(getSomaDistance()) + ", centrifugalOrder = " + std::to_string(centrifugalOrder) + " and coordinates are:", TG(2));
 	coordinates.PrintCoordinates();
 };

@@ -13,8 +13,8 @@ Coordinates& Coordinates::operator=( Coordinates &coord ) {
 
 void Coordinates::PrintCoordinates() {
 	ENTER_FUNCTION("coordinates", "PrintCoordinates()");
-	PRINTTRACE("coordinates", "X = " + std::to_string(CoordX) + "; Y = " + std::to_string(CoordX));
-	if(!XYCORRECTIONCHECKER(CoordX, CoordY)) {ERRORTRACE("coordinates", "ERROR!!!!!!!!!!!!!!!!!!\n\n\n\n\n\n\n");}
+	PRINTTRACETG("coordinates", "X = " + std::to_string(CoordX) + "; Y = " + std::to_string(CoordX), TG(6));
+	if(!XYCORRECTIONCHECKER(CoordX, CoordY)) {ERRORTRACE("coordinates", "X or Y coordinate is not correct");}
 };
 
 void Coordinates::SetX(int x) {
@@ -76,7 +76,7 @@ double Coordinates::findNewCoordinates(Coordinates oldCoordinates, double delta,
 			realDelta = pow( pow( double(CoordX - oldX), 2 ) + pow( double(CoordY - oldY), 2 ), 0.5 );
 		}
 	}
-	PRINTTRACE("coordinates", "After finding coordinates real delta is " + std::to_string(realDelta) + ", new coordinates:");
+	PRINTTRACETG("coordinates", "After finding coordinates real delta is " + std::to_string(realDelta) + ", new coordinates:", TG(6));
 	PrintCoordinates();
 	return realDelta;
 };

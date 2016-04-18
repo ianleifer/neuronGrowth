@@ -50,15 +50,6 @@ void Output::printToFile(int outputFile, std::string trace) {
 	}
 }
 
-/* There are 5 trace groups.
-	0 - Enter function
-	1 - Branching traces
-	2 - Growth cone
-	3 - Connection
-	4 - Cell stack
-	5 - Error traces
-*/
-#define TG(tgIx) (1 << tgIx)
 void Output::enterFunctionTrace(std::string fileName, std::string trace) {
 	printTrace(fileName + ": Entering function", trace, TG(0));
 }
@@ -103,17 +94,27 @@ bool Output::isPrintingEnabled(int traceGroup) {
 	//	printf("Branching traces\n");
 	}
 	if(traceGroup & TG(2)) {
-	//	printf("Growth cone\n");
+		#ifdef GROWTHCONETRACES
+			enabled = true;
+		#endif
 	}
 	if(traceGroup & TG(3)) {
-	//	printf("Connection\n");
+		#ifdef CONNECTIONTRACES
+			enabled = true;
+		#endif
 	}
 	if(traceGroup & TG(4)) {
-	//	printf("Cell stack\n");
+		#ifdef CELLSTACKTRACES
+			enabled = true;
+		#endif
 	}
 	if(traceGroup & TG(5)) {
 		enabled = true;
 	//	printf("Error traces\n");
+	}
+	if(traceGroup & TG(6)) {
+		enabled = true;
+	//	printf("Coordinate traces\n");
 	}
 	return enabled;
 }

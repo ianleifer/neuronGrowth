@@ -34,4 +34,15 @@ public:
 	bool isPrintingEnabled(int traceGroup);
 };
 
+/* There are 5 trace groups.
+	0 - Enter function
+	1 - Branching traces
+	2 - Growth cone
+	3 - Connection
+	4 - Cell stack
+	5 - Error traces
+	6 - Coordinates
+*/
+#define TG(tgIx) (1 << tgIx)
+
 #endif

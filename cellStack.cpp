@@ -9,7 +9,7 @@ CellStack* CellStack::p_CellStack = 0;
 CellStack::CellStack() {
 	output = output->getOutput();
 	ENTER_FUNCTION("cellStack", "CellStack::CellStack()");
-	PRINTTRACE("cellStack", "Cell stack created"); 
+	PRINTTRACETG("cellStack", "Cell stack created", TG(4));
 	numberOfCells = 0;
 	cells = new Cell[numberOfCells];
 };
@@ -47,12 +47,12 @@ int CellStack::stackPush(Cell cell) {
 
 		cells[numberOfCells - 1] = cell;
 
-		PRINTTRACE("cellStack", "New element successfully pushed. Stack now has " + std::to_string(numberOfCells) + " elements");
+		PRINTTRACETG("cellStack", "New element successfully pushed. Stack now has " + std::to_string(numberOfCells) + " elements", TG(4));
 		cell.PrintCoordinates();
 
 		return 0;
 	}
-	PRINTTRACE("cellStack", "ERROR:Can`t push to stack max number of elements exceeded");
+	ERRORTRACE("cellStack", "Can`t push to stack max number of elements exceeded");
 	return 1;
 };
 
@@ -82,7 +82,7 @@ Cell CellStack::stackPop() {
 
 		delete [] tmpCells;
 
-		PRINTTRACE("cellStack", "element successfully pulled from stack. Stack now has " + std::to_string(numberOfCells) + " elements");
+		PRINTTRACETG("cellStack", "element successfully pulled from stack. Stack now has " + std::to_string(numberOfCells) + " elements", TG(4));
 		cell.PrintCoordinates();
 	}
 	return cell;

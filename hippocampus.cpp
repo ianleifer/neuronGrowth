@@ -50,7 +50,7 @@ void Hippocampus::checkStack() {
 				Neuron* destination = getNeuronById(neuronIds[x][y]);
 				source->addConnection(cell.getGrowthConeId(), destination, cell.getSomaDistance());
 
-				PRINTTRACE("hippocampus", "Added new connection between neuron " + std::to_string(source->getNeuronId()) + " and neuron " + std::to_string(destination->getNeuronId()));
+				PRINTTRACETG("hippocampus", "Added new connection between neuron " + std::to_string(source->getNeuronId()) + " and neuron " + std::to_string(destination->getNeuronId()), TG(3));
 
 			}
 			break;
@@ -58,11 +58,11 @@ void Hippocampus::checkStack() {
 			// Case we need to create a new connection
 			// Dendrite can be connected to axon
 			if(cell.getNeuronId() != neuronIds[x][y] && cell.getCellType() == DENDRITE) {
-				Neuron* source      = getNeuronById(cell.getNeuronId());
-				Neuron* destination = getNeuronById(neuronIds[x][y]);
+				Neuron* source      = getNeuronById(neuronIds[x][y]);
+				Neuron* destination = getNeuronById(cell.getNeuronId());
 				source->addConnection(cell.getGrowthConeId(), destination, cell.getSomaDistance());
 
-				PRINTTRACE("hippocampus", "Added new connection between neuron " + std::to_string(source->getNeuronId()) + " and neuron " + std::to_string(destination->getNeuronId()));
+				PRINTTRACETG("hippocampus", "Added new connection between neuron " + std::to_string(source->getNeuronId()) + " and neuron " + std::to_string(destination->getNeuronId()), TG(3));
 
 			}
 			break;

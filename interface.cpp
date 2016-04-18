@@ -372,10 +372,10 @@ void OpenGLInterface::drawPixel(int x, int y, int type, int environmentType, dou
 	case ENVIRONMENT:
 		switch(environmentType) {
 		case 0:
-			glColor3f(0, 0, 10 * intensity);
+			glColor3f(0, 0, ENVIRONMENTINTENSITYMULTIPLIER * intensity);
 			break;
 		case 1:
-			glColor3f(0, 10 * intensity, 0);
+			glColor3f(0, ENVIRONMENTINTENSITYMULTIPLIER * intensity, 0.6 * ENVIRONMENTINTENSITYMULTIPLIER * intensity);
 			break;
 		}
 		break;

@@ -38,6 +38,7 @@
 #include <cstring> // For strlen
 
 #define PRINTTRACE(fileName, trace)			output->printTrace(fileName, trace)
+#define PRINTTRACETG(fileName, trace, tg)	output->printTrace(fileName, trace, tg)
 #define ERRORTRACE(fileName, trace)			output->printErrorTrace(fileName, trace)
 #define ENTER_FUNCTION(fileName, trace)		output->enterFunctionTrace(fileName, trace)
 #define PRINTSTATISTICS(outputFile, trace)	output->printToFile(outputFile, trace)
