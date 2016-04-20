@@ -21,9 +21,6 @@
     <ClCompile Include="cmn_struct.cpp">
       <Filter>Файлы исходного кода</Filter>
     </ClCompile>
-    <ClCompile Include="connection.cpp">
-      <Filter>Файлы исходного кода</Filter>
-    </ClCompile>
     <ClCompile Include="coordinates.cpp">
       <Filter>Файлы исходного кода</Filter>
     </ClCompile>
@@ -54,6 +51,15 @@
     <ClCompile Include="interface.cpp">
       <Filter>Файлы исходного кода</Filter>
     </ClCompile>
+    <ClCompile Include="synaps.cpp">
+      <Filter>Файлы исходного кода</Filter>
+    </ClCompile>
+    <ClCompile Include="chart.cpp">
+      <Filter>Файлы исходного кода</Filter>
+    </ClCompile>
+    <ClCompile Include="interfaceClasses.cpp">
+      <Filter>Файлы исходного кода</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="modeling.vcproj">
@@ -68,9 +74,6 @@
       <Filter>Заголовочные файлы</Filter>
     </ClInclude>
     <ClInclude Include="cmn_struct.h">
-      <Filter>Заголовочные файлы</Filter>
-    </ClInclude>
-    <ClInclude Include="connection.h">
       <Filter>Заголовочные файлы</Filter>
     </ClInclude>
     <ClInclude Include="coordinates.h">
@@ -101,6 +104,15 @@
       <Filter>Заголовочные файлы</Filter>
     </ClInclude>
     <ClInclude Include="interface.h">
+      <Filter>Заголовочные файлы</Filter>
+    </ClInclude>
+    <ClInclude Include="synaps.h">
+      <Filter>Заголовочные файлы</Filter>
+    </ClInclude>
+    <ClInclude Include="chart.h">
+      <Filter>Заголовочные файлы</Filter>
+    </ClInclude>
+    <ClInclude Include="interfaceClasses.h">
       <Filter>Заголовочные файлы</Filter>
     </ClInclude>
   </ItemGroup>

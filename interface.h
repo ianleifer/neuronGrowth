@@ -7,6 +7,8 @@
 #include "hippocampus.h"
 #include "environment.h"
 #include "output.h"
+#include "chart.h"
+#include "interfaceClasses.h"
 
 class OpenGLInterface {
 private:
@@ -38,7 +40,9 @@ private:
 	Environment* environment;
 	Output *output;
 	void printPicture();
-	void drawPixel(int x, int y, int type, int environmentType = -1, double intensity = -1);
+	void drawNeuronPicture(FigureRectangle rectangle);
+	void drawPixel(FigureRectangle rectangle, int x, int y, int type, int environmentType = -1, double intensity = -1);
+	void drawRectangle(FigureRectangle rectangle);
 	void getFields();
 
 	double environmentField[NUMBEROFCELLSX][NUMBEROFCELLSY][NUMBEROFNEURONTYPES];

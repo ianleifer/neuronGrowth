@@ -3,7 +3,6 @@
 
 #include "cmn_struct.h"
 #include "neurite.h"
-#include "connection.h"
 
 class Neuron {
 private:

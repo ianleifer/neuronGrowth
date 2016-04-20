@@ -2,6 +2,7 @@
 #define HIPPOCAMPUS_H
 
 #include "neuron.h"
+#include "synaps.h"
 #include "cmn_defines.h"
 #include "cmn_struct.h"
 #include "output.h"

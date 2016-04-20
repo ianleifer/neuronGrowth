@@ -2,15 +2,15 @@
 #define SETTINGS_H
 
 /* Picture settings */
-#define PICTURESCALEX	2
-#define PICTURESCALEY	3
+#define PICTURESCALEX	1
+#define PICTURESCALEY	1
 #define ENVIRONMENTINTENSITYMULTIPLIER	10
 /* End of picture settings */
 
 #define NUMBEROFDIMENSIONS 2
 
 #define NUMBEROFCELLSX 600
-#define NUMBEROFCELLSY 300
+#define NUMBEROFCELLSY 600
 
 #define WORKTIME 50000
 

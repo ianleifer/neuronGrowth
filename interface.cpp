@@ -14,7 +14,8 @@ OpenGLInterface::OpenGLInterface() {
 	fullscreen = false;
 	
 	//CreateGLWindow(L"OpenGL window", 800, 600, 32, fullscreen);
-	CreateGLWindow(L"OpenGL window", NUMBEROFCELLSX * PICTURESCALEX, NUMBEROFCELLSY * PICTURESCALEY, 32, fullscreen);
+	/* X scale is multiplied by 2 to draw the chart in the right side of the picture */
+	CreateGLWindow(L"OpenGL window", NUMBEROFCELLSX * PICTURESCALEX * 2, NUMBEROFCELLSY * PICTURESCALEY, 32, fullscreen);
 
 	hippocampus = hippocampus->getHippocampus();
 	environment = environment->getEnvironment();
@@ -322,17 +323,12 @@ void OpenGLInterface::printPicture() {
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_DST_ALPHA);
 
-	for(int j = 0; j < NUMBEROFCELLSY; j++)
-		for(int i = 0; i < NUMBEROFCELLSX; i++)
-			drawPixel(i, j, picture[i][j]);
+	Color color(0, 1, 0);
+	FigureRectangle rectangle(-1, -1, 0, 1);
+	rectangle.setColor(color);
 	
-	#ifdef DIFFUSIONVISIBLE
-		for(int type = 0; type < NUMBEROFNEURONTYPES; type++)
-			for(int j = 0; j < NUMBEROFCELLSY; j++)
-				for(int i = 0; i < NUMBEROFCELLSX; i++)
-					drawPixel(i, j, ENVIRONMENT, type, environmentField[i][j][type]);
-	#endif
-	
+	drawNeuronPicture(rectangle);
+
 	glDisable(GL_BLEND);
 	glDisable(GL_ALPHA_TEST);
 	SwapBuffers(hDC);
@@ -342,7 +338,20 @@ void OpenGLInterface::printPicture() {
 #endif
 }
 
-void OpenGLInterface::drawPixel(int x, int y, int type, int environmentType, double intensity) {
+void OpenGLInterface::drawNeuronPicture(FigureRectangle rectangle) {
+	for(int j = 0; j < NUMBEROFCELLSY; j++)
+	for(int i = 0; i < NUMBEROFCELLSX; i++)
+		drawPixel(rectangle, i, j, picture[i][j]);
+	
+	#ifdef DIFFUSIONVISIBLE
+		for(int type = 0; type < NUMBEROFNEURONTYPES; type++)
+			for(int j = 0; j < NUMBEROFCELLSY; j++)
+				for(int i = 0; i < NUMBEROFCELLSX; i++)
+					drawPixel(rectangle, i, j, ENVIRONMENT, type, environmentField[i][j][type]);
+	#endif
+}
+
+void OpenGLInterface::drawPixel(FigureRectangle rectangle, int x, int y, int type, int environmentType, double intensity) {
     glLoadIdentity();
 	switch(type) {
 	case NOTHING:
@@ -370,16 +379,35 @@ void OpenGLInterface::drawPixel(int x, int y, int type, int environmentType, dou
 	default:
 		glColor3f(0, 0, 0);
 	}
-	double X = 2 * double(x) / NUMBEROFCELLSX;
-	double Y = 2 * double(y) / NUMBEROFCELLSY;
-	glTranslatef(-1 + X, 1 - Y, 0.0);
-	double halfSizeX = 1.0 / NUMBEROFCELLSX;
-	double halfSizeY = 1.0 / NUMBEROFCELLSY;
+	double startX = rectangle.getMiddleX() - rectangle.getSizeX() / 2;
+	double startY = rectangle.getMiddleY() - rectangle.getSizeY() / 2;
+	double scaleX = rectangle.getSizeX();
+	double scaleY = rectangle.getSizeY();
+	double X = double(x) / NUMBEROFCELLSX;
+	double Y = double(y) / NUMBEROFCELLSY;
+	glTranslatef(startX + X * scaleX, startY + Y * scaleY, 0.0);
+	double halfSizeX = 1.0 / NUMBEROFCELLSX / 2 * scaleX;
+	double halfSizeY = 1.0 / NUMBEROFCELLSY / 2 * scaleY;
 	glBegin(GL_QUADS);
 		glVertex2f(-halfSizeX, halfSizeY);
 		glVertex2f(halfSizeX,  halfSizeY);
 		glVertex2f(halfSizeX, -halfSizeY);
 		glVertex2f(-halfSizeX,-halfSizeY);
+	glEnd();
+}
+
+void OpenGLInterface::drawRectangle(FigureRectangle rectangle) {
+	glLoadIdentity();
+	Color color = rectangle.getColor();
+	glColor3f(color.getRed(), color.getGreen(), color.getBlue());
+	glTranslatef(rectangle.getMiddleX(), rectangle.getMiddleY(), 0.0);
+	double halfSizeX = rectangle.getSizeX() / 2;
+	double halfSizeY = rectangle.getSizeY() / 2;
+	glBegin(GL_QUADS);
+		glVertex3f(-halfSizeX, halfSizeY, 0.0);
+		glVertex3f(halfSizeX,  halfSizeY, 0.0);
+		glVertex3f(halfSizeX, -halfSizeY, 0.0);
+		glVertex3f(-halfSizeX,-halfSizeY, 0.0);
 	glEnd();
 }
 
