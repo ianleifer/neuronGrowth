@@ -301,22 +301,6 @@ void OpenGLInterface::getFields() {
 				environmentField[x][y][type] = environment->getField(x, y, type);
 }
 
-void OpenGLInterface::printEnvironment() {
-	#ifdef ENVIRONMENTSTATISTICS
-		std::string environment;
-		for(int type = 0; type < NUMBEROFNEURONTYPES; type++) {
-			environment = "\n" + std::to_string(type);
-			for(int y = 0; y < NUMBEROFCELLSY; y++) {
-				for(int x = 0; x < NUMBEROFCELLSX; x++)
-					environment += std::to_string(environmentField[x][y][type]) + " ";
-				environment += "\n";
-			}
-			environment += "\n";
-		}
-		PRINTSTATISTICS(ENVIRONMENTSTATISTICSFILEID, environment);
-	#endif
-}
-
 void OpenGLInterface::printPicture() {
     glLoadIdentity();
 	glEnable(GL_ALPHA_TEST);
@@ -348,6 +332,20 @@ void OpenGLInterface::drawNeuronPicture(FigureRectangle rectangle) {
 			for(int j = 0; j < NUMBEROFCELLSY; j++)
 				for(int i = 0; i < NUMBEROFCELLSX; i++)
 					drawPixel(rectangle, i, j, ENVIRONMENT, type, environmentField[i][j][type]);
+	#endif
+
+	#ifdef ENVIRONMENTSTATISTICS
+		std::string environment;
+		for(int type = 0; type < NUMBEROFNEURONTYPES; type++) {
+			environment = "\n" + std::to_string(type);
+			for(int y = 0; y < NUMBEROFCELLSY; y++) {
+				for(int x = 0; x < NUMBEROFCELLSX; x++)
+					environment += std::to_string(environmentField[x][y][type]) + " ";
+				environment += "\n";
+			}
+			environment += "\n";
+		}
+		PRINTSTATISTICS(ENVIRONMENTSTATISTICSFILEID, environment);
 	#endif
 }
 
@@ -396,23 +394,7 @@ void OpenGLInterface::drawPixel(FigureRectangle rectangle, int x, int y, int typ
 	glEnd();
 }
 
-void OpenGLInterface::drawRectangle(FigureRectangle rectangle) {
-	glLoadIdentity();
-	Color color = rectangle.getColor();
-	glColor3f(color.getRed(), color.getGreen(), color.getBlue());
-	glTranslatef(rectangle.getMiddleX(), rectangle.getMiddleY(), 0.0);
-	double halfSizeX = rectangle.getSizeX() / 2;
-	double halfSizeY = rectangle.getSizeY() / 2;
-	glBegin(GL_QUADS);
-		glVertex3f(-halfSizeX, halfSizeY, 0.0);
-		glVertex3f(halfSizeX,  halfSizeY, 0.0);
-		glVertex3f(halfSizeX, -halfSizeY, 0.0);
-		glVertex3f(-halfSizeX,-halfSizeY, 0.0);
-	glEnd();
-}
-
 void OpenGLInterface::tick() {
 	getFields();
-	printEnvironment();
 	printPicture();
 }

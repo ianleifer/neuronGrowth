@@ -35,6 +35,8 @@ private:
 
 	/* Picture creation */
 	int picture[NUMBEROFCELLSX][NUMBEROFCELLSY];
+	double environmentField[NUMBEROFCELLSX][NUMBEROFCELLSY][NUMBEROFNEURONTYPES];
+	void getFields();
 
 	Hippocampus* hippocampus;
 	Environment* environment;
@@ -42,11 +44,7 @@ private:
 	void printPicture();
 	void drawNeuronPicture(FigureRectangle rectangle);
 	void drawPixel(FigureRectangle rectangle, int x, int y, int type, int environmentType = -1, double intensity = -1);
-	void drawRectangle(FigureRectangle rectangle);
-	void getFields();
-
-	double environmentField[NUMBEROFCELLSX][NUMBEROFCELLSY][NUMBEROFNEURONTYPES];
-	void printEnvironment();
+	void printLineChart(LineChart &lineChart, FigureRectangle rectangle);
 	/* End of picture creation */
 public:
 	OpenGLInterface();
