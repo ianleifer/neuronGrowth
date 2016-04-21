@@ -5,8 +5,8 @@
 /*			Picture settings		*/
 /************************************/
 
-#define PICTURESCALEX	40
-#define PICTURESCALEY	40
+#define PICTURESCALEX	3
+#define PICTURESCALEY	3
 #define ENVIRONMENTINTENSITYMULTIPLIER	10
 #define NUMBEROFXVALUELABELS	4
 #define NUMBEROFYVALUELABELS	4
@@ -21,8 +21,8 @@
 
 #define NUMBEROFDIMENSIONS 2
 
-#define NUMBEROFCELLSX 20
-#define NUMBEROFCELLSY 20
+#define NUMBEROFCELLSX 200
+#define NUMBEROFCELLSY 200
 
 #define WORKTIME 50000
 
@@ -34,7 +34,7 @@
 #define INTERACTION01 ( 1.0 )
 #define INTERACTION10 ( 1.0 )
 #define INTERACTION11 ( 0.0 )
-//#define DIFFUSIONVISIBLE
+#define DIFFUSIONVISIBLE
 
 //#define STEPBYSTEP
 #define STOPONERROR
@@ -98,6 +98,7 @@
 #define IzhikevichV0		-60
 #define IzhikevichU0		0
 #define IzhikevichCm		50
+#define IzhikevichNoise		0
 
 /************************************/
 /*End of Izhikevich model constants	*/

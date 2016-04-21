@@ -136,7 +136,8 @@ void Neuron::solvePotentialEquation() {
 	double Vpeak	= IzhikevichVpeak;
 	double c		= IzhikevichC;
 	double d		= IzhikevichD;
-	neuronPotential[timer + 1] = neuronPotential[timer] + h * izhik_Vm();
+	double noise	= (IzhikevichNoise != 0) ? (- IzhikevichNoise / 2 + rand()%IzhikevichNoise) : 0;
+	neuronPotential[timer + 1] = neuronPotential[timer] + h * izhik_Vm() + noise;
 	Um			   [timer + 1] = Um[timer]				+ h * izhik_Um();
 
 	if (neuronPotential[timer + 1] > Vpeak) {
@@ -144,7 +145,7 @@ void Neuron::solvePotentialEquation() {
 		Um[timer + 1] = Um[timer] + d;
 	}
 
-	synapticCurrent = 60;
+	synapticCurrent = 45;
 }
 
 /************************************/
