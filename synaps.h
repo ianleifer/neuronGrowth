@@ -2,15 +2,27 @@
 #define SYNAPS_H
 
 #include "neuron.h"
+#include "output.h"
 
 class Synaps {
 private:
+	Output *output;
+
 	Neuron *source;
 	Neuron *destination;
-	int delay;
+	double delay;
 	//double probability;
 public:
-	Synaps(Neuron *Source, Neuron *Destination, int Delay = -1);
+	Synaps();
+	Synaps(Neuron *Source, Neuron *Destination, double Delay = -1);
+	void Set(Neuron *Source, Neuron *Destination, double Delay = -1);
+
+	void printSynaps();
+
+	Synaps& operator=(Synaps &synaps);
+	Neuron* getSource();
+	Neuron* getDestination();
+	double getDelay();
 };
 
 #endif

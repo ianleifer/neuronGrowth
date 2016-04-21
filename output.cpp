@@ -94,7 +94,9 @@ void Output::printTrace(std::string fileName, std::string trace, int traceGroup)
 bool Output::isPrintingEnabled(int traceGroup) {
 	bool enabled = false;
 	if(traceGroup & TG(0)) {
-		enabled = true;
+		#ifdef ENTERFUNCTIONTRACES
+			enabled = true;
+		#endif
 	}
 	if(traceGroup & TG(1)) {
 	//	printf("Branching traces\n");

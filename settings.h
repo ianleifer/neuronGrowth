@@ -7,8 +7,8 @@
 
 #define NUMBEROFDIMENSIONS 2
 
-#define NUMBEROFCELLSX 10
-#define NUMBEROFCELLSY 10
+#define NUMBEROFCELLSX 5
+#define NUMBEROFCELLSY 5
 
 #define WORKTIME 50000
 
@@ -24,9 +24,10 @@
 //#define STEPBYSTEP
 #define STOPONERROR
 
-#define TRACESON
+//#define TRACESON
 #define TRACEINFILE
 /* TODO: create trace groups */
+#define ENTERFUNCTIONTRACES
 //#define CELLSTACKTRACES
 //#define GROWTHCONETRACES
 #define CONNECTIONTRACES
@@ -34,7 +35,7 @@
 
 #define STATISTICSON
 #ifdef STATISTICSON
-#define LENGTHSTATISTICS
+//#define LENGTHSTATISTICS
 //#define ENVIRONMENTSTATISTICS
 #define CONNECTIVITYGRAPHSTATISTICS
 #endif
@@ -102,6 +103,7 @@
 #define IzhikevichU0		0
 #define IzhikevichCm		50
 #define IzhikevichNoise		0
+#define IzhikevichCurrentPerSynaps	20
 
 /************************************/
 /*End of Izhikevich model constants	*/

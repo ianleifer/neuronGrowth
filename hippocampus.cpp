@@ -15,6 +15,7 @@ Hippocampus* Hippocampus::getHippocampus() {
 
 Hippocampus::Hippocampus() {
 	numberOfNeurons = 0;
+	numberOfSynapses = 0;
 
 	for(int i = 0; i < NUMBEROFCELLSX; i++)
 		for(int j = 0; j < NUMBEROFCELLSY; j++)
@@ -24,6 +25,11 @@ Hippocampus::Hippocampus() {
 		for(int j = 0; j < NUMBEROFCELLSY; j++)
 			neuronIds[i][j] = 0;
 	output = output->getOutput();
+}
+
+Hippocampus::~Hippocampus() {
+	if(numberOfNeurons != 0) {delete [] neurons;}
+	if(numberOfSynapses != 0) {delete [] synapses;}
 }
 
 #include "cellStack.h"
@@ -48,10 +54,7 @@ void Hippocampus::checkStack() {
 			if(cell.getNeuronId() != neuronIds[x][y] && cell.getCellType() == AXON) {
 				Neuron* source      = getNeuronById(cell.getNeuronId());
 				Neuron* destination = getNeuronById(neuronIds[x][y]);
-				source->addConnection(cell.getGrowthConeId(), destination, cell.getSomaDistance());
-
-				PRINTTRACETG("hippocampus", "Added new connection between neuron " + std::to_string(source->getNeuronId()) + " and neuron " + std::to_string(destination->getNeuronId()), TG(3));
-
+				addSynaps(source, destination);
 			}
 			break;
 		case AXON:
@@ -60,10 +63,7 @@ void Hippocampus::checkStack() {
 			if(cell.getNeuronId() != neuronIds[x][y] && cell.getCellType() == DENDRITE) {
 				Neuron* source      = getNeuronById(neuronIds[x][y]);
 				Neuron* destination = getNeuronById(cell.getNeuronId());
-				source->addConnection(cell.getGrowthConeId(), destination, cell.getSomaDistance());
-
-				PRINTTRACETG("hippocampus", "Added new connection between neuron " + std::to_string(source->getNeuronId()) + " and neuron " + std::to_string(destination->getNeuronId()), TG(3));
-
+				addSynaps(source, destination);
 			}
 			break;
 		}
@@ -134,6 +134,19 @@ Neuron* Hippocampus::getNeuronById(int neuronId) {
 	return neuron;
 }
 
+void Hippocampus::addSynaps(Neuron *source, Neuron *destination, double delay) {
+	if(numberOfSynapses != 0) {dynamicArrayRealloc(Synaps, synapses, numberOfSynapses);}
+	else {synapses = new Synaps; numberOfSynapses++;}
+	synapses[numberOfSynapses - 1].Set(source, destination, delay);
+	source->addSynaps();
+	PRINTTRACETG("hippocampus", "Added new synaps between neuron " + std::to_string(source->getNeuronId()) + " and neuron " + std::to_string(destination->getNeuronId()), TG(3));
+}
+
+void Hippocampus::fireSynapses() {
+	for(int i = 0; i < numberOfSynapses; i++)
+		if(synapses[i].getSource()->isFired()) {synapses[i].getDestination()->transferPerturbation();}
+}
+
 /************************/
 /*      Interface       */
 /************************/
@@ -152,6 +165,8 @@ void Hippocampus::tick(int t) {
 		for (int i = 0; i < MAXNUMBEROFNEURONS; i++) {
 			addNeuron();
 		}
+		for(int i = 0; i < 4; i++)
+			addSynaps(neurons + rand()%4, neurons + rand()%4);
 	}
 	for(int i = 0; i < numberOfNeurons; i++)
 		neurons[i].tick();
@@ -165,45 +180,18 @@ void Hippocampus::tick(int t) {
 
 void Hippocampus::printConnectivityGraphStatistics() {
 	ENTER_FUNCTION("hippocampus", "printConnectivityGraphStatistics()");
-	int *numberOfConnections;
-	int totalNumberOfConnections = 0;
-	struct Connections {
-		int sourceId;
-		int destinationId;
-		int delay;
-	};
+
+	if(numberOfSynapses == 0) {return;}
 	if(numberOfNeurons != 0) {
-		numberOfConnections = new int[numberOfNeurons];
+		PRINTSTATISTICS(CONNECTIVITYGRAPHSTATICSFILEID, "Number of synapses:");
 
 		for(int i = 0; i < numberOfNeurons; i++) {
-			numberOfConnections[i] = neurons[i].getNumberOfConnections();
-			totalNumberOfConnections += numberOfConnections[i];
+			PRINTSTATISTICS(CONNECTIVITYGRAPHSTATICSFILEID, std::to_string(i) + "\t" + std::to_string(neurons[i].getNumberOfSynapses()));
 		}
-		PRINTSTATISTICS(CONNECTIVITYGRAPHSTATICSFILEID, "Number of connections:");
-
-		for(int i = 0; i < numberOfNeurons; i++) {
-			PRINTSTATISTICS(CONNECTIVITYGRAPHSTATICSFILEID, std::to_string(i) + "\t" + std::to_string(numberOfConnections[i]));
-		}
-		struct Connections *connections;
-		connections = new struct Connections[totalNumberOfConnections];
-
-		int counter = 0;
-		for(int i = 0; i < numberOfNeurons; i++) {
-			for(int j = 0; j < numberOfConnections[i]; j++) {
-				connections[counter].sourceId      = i;
-				connections[counter].destinationId = neurons[i].getConnectionDestination(j);
-				connections[counter].delay         = neurons[i].getConnectionDelay(j);
-				counter++;
-			}
-		}
-
-		PRINTSTATISTICS(CONNECTIVITYGRAPHSTATICSFILEID, "Source\tDest\tDelay");
-		for(int i = 0; i < totalNumberOfConnections; i++) {
-			PRINTSTATISTICS(CONNECTIVITYGRAPHSTATICSFILEID, std::to_string(connections[i].sourceId) + "\t" + std::to_string(connections[i].destinationId) + "\t" + std::to_string(connections[i].delay));
-		}
-
-		delete [] connections;
-		delete [] numberOfConnections;
+		
+		PRINTSTATISTICS(CONNECTIVITYGRAPHSTATICSFILEID, "Synapses are:\nSource\tDestination\tDelay");
+		for(int i = 0; i < numberOfSynapses; i++)
+			synapses[i].printSynaps();
 	}
 }
 

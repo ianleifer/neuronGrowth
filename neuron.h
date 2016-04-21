@@ -21,19 +21,14 @@ private:
 	int numberOfDendrites;
 	Dendrite *dendrites;
 
+	bool fired;
 	double synapticCurrent;
 	double neuronPotential[WORKTIME + 1];
 	double Um[WORKTIME + 1];
 	double izhik_Vm();
 	double izhik_Um();
 	void solvePotentialEquation();
-	int numberOfConnections;
-	//Connection *connections;
-	struct Connection {
-		Neuron *neuron;
-		int delay;
-		//double probability;
-	}*connections;
+	int numberOfSynapses;
 public:
 	static int NeuronCounter;
 	void resetIdCounter();
@@ -42,8 +37,11 @@ public:
 	~Neuron();
 	void setCoordinates(int x, int y);
 	void setCoordinates(Coordinates tmpCoord);
-
-	int addConnection(int growthConeId, Neuron* neuron, int extraDelay);
+	
+	void pushPotentialToChart(LineChart &lineChart);
+	void tick();
+	void addSynaps();
+	void transferPerturbation();
 
 	Neuron& operator=(Neuron &neuron);
 	int getNeuronId();
@@ -53,13 +51,8 @@ public:
 	int getNumberOfDendrites();
 	Axon getAxon(int neuriteId);
 	Dendrite getDendrite(int neuriteId);
-	int getNumberOfConnections();
-	int getConnectionDestination(int connectionId);
-	int getConnectionDelay(int connectionId);
-	//struct Connection getConnection(int connectionId);
-	
-	void pushPotentialToChart(LineChart &lineChart);
-	void tick();
+	int getNumberOfSynapses();
+	bool isFired();
 };
 
 #endif

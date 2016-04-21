@@ -27,12 +27,12 @@ Neuron::Neuron() {
 	numberOfDendrites = 0;
 	dendrites = new Dendrite[numberOfDendrites];
 
-	numberOfConnections = 0;
-	connections = new Connection[numberOfConnections];
+	numberOfSynapses = 0;
 
 	neuronPotential[0]	= IzhikevichV0;
 	Um[0]				= IzhikevichU0;
 	synapticCurrent = 0;
+	fired = false;
 
 	PRINTTRACE("neuron", "Neuron with id " + std::to_string(NeuronId) + " was created");
 }
@@ -41,7 +41,6 @@ Neuron::~Neuron() {
 	NeuronCounter--;
 	delete [] axons;
 	delete [] dendrites;
-	delete [] connections;
 }
 
 void Neuron::setCoordinates(int x, int y) {//TODO: proper checking of coordinates availability
@@ -87,32 +86,6 @@ int Neuron::addDendrite(Coordinates coordinates) {
 	return 0;
 }
 
-int Neuron::addConnection(int growthConeId, Neuron* neuron, int extraDelay) {
-	ENTER_FUNCTION("neuron", "addConnection(int growthConeId, Neuron* neuron). Source: neuronId = " + std::to_string(NeuronId) + ", Destination: neuronId = " + std::to_string(neuron->getNeuronId()) + "; growthConeId = " + std::to_string(growthConeId));
-	Connection *tmpConnections;
-	tmpConnections = new Connection[numberOfConnections];
-	for(int i = 0; i < numberOfConnections; i++) {
-		tmpConnections[i].neuron = connections[i].neuron;
-		tmpConnections[i].delay  = connections[i].delay;
-	}
-
-	connections = new Connection[++numberOfConnections];
-
-	for(int i = 0; i < numberOfConnections - 1; i++) {
-		connections[i].neuron = tmpConnections[i].neuron;
-		connections[i].delay  = tmpConnections[i].delay;
-	}
-
-	delete [] tmpConnections;
-
-	connections[numberOfConnections - 1].neuron = neuron;
-	connections[numberOfConnections - 1].delay  = extraDelay + (int)axons[0].getGrowthConeDistance(growthConeId);
-		//(int)axons->getGrowthConeDistance(growthConeId);
-	
-	PRINTTRACE("neuron", "Neuron id " + std::to_string(NeuronId) + " now has new connection with delay " + std::to_string(connections[numberOfConnections - 1].delay) + ". The number of connections: " + std::to_string(numberOfConnections) + "");
-	return 0;
-}
-
 double Neuron::izhik_Vm(){
 	ENTER_FUNCTION("neuron", "Neuron::izhik_Vm(). NeuronId = " + std::to_string(NeuronId));
 	double k	= IzhikevichK;
@@ -137,15 +110,16 @@ void Neuron::solvePotentialEquation() {
 	double c		= IzhikevichC;
 	double d		= IzhikevichD;
 	double noise	= (IzhikevichNoise != 0) ? (- IzhikevichNoise / 2 + rand()%IzhikevichNoise) : 0;
+	fired = false;
 	neuronPotential[timer + 1] = neuronPotential[timer] + h * izhik_Vm() + noise;
 	Um			   [timer + 1] = Um[timer]				+ h * izhik_Um();
 
 	if (neuronPotential[timer + 1] > Vpeak) {
 		neuronPotential[timer + 1] = c;
 		Um[timer + 1] = Um[timer] + d;
+		fired = true;
 	}
-
-	synapticCurrent = 45;
+	synapticCurrent = 50;
 }
 
 /************************************/
@@ -196,10 +170,19 @@ void Neuron::tick() {
 	#endif
 }
 
+void Neuron::addSynaps() {
+	numberOfSynapses++;
+}
+
+void Neuron::transferPerturbation() {
+	synapticCurrent += IzhikevichCurrentPerSynaps;
+}
+
 Neuron& Neuron::operator=(Neuron &neuron) {
-	NeuronId          = neuron.getNeuronId();
-	coord             = neuron.getCoordinates();
-	neuronType        = neuron.getNeuronType();
+	NeuronId			= neuron.getNeuronId();
+	coord				= neuron.getCoordinates();
+	neuronType			= neuron.getNeuronType();
+	numberOfSynapses	= neuron.getNumberOfSynapses();
 
 	numberOfAxons     = neuron.getNumberOfAxons();
 	for(int i = 0; i < numberOfAxons; i++)
@@ -209,11 +192,6 @@ Neuron& Neuron::operator=(Neuron &neuron) {
 	for(int i = 0; i < numberOfDendrites; i++)
 		dendrites[i]  = neuron.getDendrite(i);
 
-	numberOfConnections = neuron.getNumberOfConnections();
-/*	for(int i = 0; i < numberOfConnections; i++) {
-		connections[i].neuron = neuron.getConnection(i).neuron;
-		connections[i].delay  = neuron.getConnection(i).delay;
-	}*/
 	return *this;
 }
 
@@ -250,18 +228,10 @@ Dendrite Neuron::getDendrite(int neuriteId) {
 	return dendrites[neuriteId];
 }
 
-int Neuron::getNumberOfConnections() {
-	return numberOfConnections;
+int Neuron::getNumberOfSynapses() {
+	return numberOfSynapses;
 }
 
-int Neuron::getConnectionDestination(int connectionId) {
-	return connections[connectionId].neuron->getNeuronId();
+bool Neuron::isFired() {
+	return fired;
 }
-
-int Neuron::getConnectionDelay(int connectionId){
-	return connections[connectionId].delay;
-}
-
-/*struct Connection Neuron::getConnection(int connectionId) {
-	return connections[connectionId];
-};*/

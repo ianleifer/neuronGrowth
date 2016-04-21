@@ -12,8 +12,15 @@ class Hippocampus {
 private:
 	static Hippocampus *p_Hippocampus;
 	Hippocampus();
+
 	int numberOfNeurons;
 	Neuron *neurons;
+	int addNeuron(int x = -1, int y = -1);
+
+	int numberOfSynapses;
+	Synaps *synapses;
+	void addSynaps(Neuron *source, Neuron *destination, double delay = -1);
+
 	Output *output;
 
 	/* TODO: Hippocampus must contain cells. It is more logical */
@@ -21,11 +28,12 @@ private:
 	int neuronIds[NUMBEROFCELLSX][NUMBEROFCELLSY];
 
 	void checkStack();
-	int  addNeuron(int x = -1, int y = -1);
+	void fireSynapses();
 	void fillField(int x, int y, char type, int neuronId);
 	void createNeuron();
 	Neuron* getNeuronById(int neuronId);
 public:
+	~Hippocampus();
 	static Hippocampus* getHippocampus();
 	int getFieldType(int x, int y);
 	void printConnectivityGraphStatistics();
