@@ -336,19 +336,17 @@ void OpenGLInterface::drawNeuronPicture(FigureRectangle rectangle) {
 					drawPixel(rectangle, i, j, ENVIRONMENT, type, environmentField[i][j][type]);
 	#endif
 
-	#ifdef ENVIRONMENTSTATISTICS
-		std::string environment;
-		for(int type = 0; type < NUMBEROFNEURONTYPES; type++) {
-			environment = "\n" + std::to_string(type);
-			for(int y = 0; y < NUMBEROFCELLSY; y++) {
-				for(int x = 0; x < NUMBEROFCELLSX; x++)
-					environment += std::to_string(environmentField[x][y][type]) + " ";
-				environment += "\n";
-			}
+	std::string environment;
+	for(int type = 0; type < NUMBEROFNEURONTYPES; type++) {
+		environment = "\n" + std::to_string(type);
+		for(int y = 0; y < NUMBEROFCELLSY; y++) {
+			for(int x = 0; x < NUMBEROFCELLSX; x++)
+				environment += std::to_string(environmentField[x][y][type]) + " ";
 			environment += "\n";
 		}
-		PRINTSTATISTICS(ENVIRONMENTSTATISTICSFILEID, environment);
-	#endif
+		environment += "\n";
+	}
+	PRINTSTATISTICS(ENVIRONMENTSTATISTICSFILEID, environment);
 }
 
 void OpenGLInterface::drawPixel(FigureRectangle rectangle, int x, int y, int type, int environmentType, double intensity) {

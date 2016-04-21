@@ -7,8 +7,8 @@
 
 #define NUMBEROFDIMENSIONS 2
 
-#define NUMBEROFCELLSX 20
-#define NUMBEROFCELLSY 20
+#define NUMBEROFCELLSX 10
+#define NUMBEROFCELLSY 10
 
 #define WORKTIME 50000
 
@@ -20,7 +20,6 @@
 #define INTERACTION01 ( 1.0 )
 #define INTERACTION10 ( 1.0 )
 #define INTERACTION11 ( 0.0 )
-#define DIFFUSIONVISIBLE
 
 //#define STEPBYSTEP
 #define STOPONERROR
@@ -64,6 +63,8 @@
 #define ENVIRONMENTINTENSITYMULTIPLIER	10
 #define NUMBEROFXVALUELABELS	4
 #define NUMBEROFYVALUELABELS	4
+
+//#define DIFFUSIONVISIBLE
 
 /************************************/
 /*		End of picture settings		*/
