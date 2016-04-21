@@ -407,8 +407,8 @@ void OpenGLInterface::drawLineChart(LineChart &lineChart, FigureRectangle rectan
 	/* Put coursor back to (0, 0, 0) */
     glLoadIdentity();
 
-	drawArgumentLabels(lineChart.getMinArgument(), lineChart.getMaxActiveArgument(), 4, rectangle);
-	drawValueLabels(lineChart.getMinValue(), lineChart.getMaxValue(), 4, rectangle);
+	drawArgumentLabels(lineChart.getMinArgument(), lineChart.getMaxActiveArgument(), NUMBEROFXVALUELABELS, rectangle);
+	drawValueLabels(lineChart.getMinValue(), lineChart.getMaxValue(), NUMBEROFYVALUELABELS, rectangle);
 	rectangle.resize(0.9, 0.93);
 
 	double startX = rectangle.getMiddleX() - rectangle.getSizeX() / 2;
@@ -463,7 +463,8 @@ void OpenGLInterface::drawValueLabels(double minValue, double maxValue, int numb
 	double delta = (maxValue - minValue) / double(numberOfBins);
 	for(int i = 0; i < numberOfBins; i++) {
 		char bufer[10];
-		_itoa_s(minValue + delta * i, bufer, 10, 10);
+		int sign = minValue + delta * i;
+		_itoa_s(sign, bufer, 10, 10);
 		drawText(bufer, sizeof(bufer) / sizeof(char), x + 0.02, startY + deltaY * i);
 	}
 }

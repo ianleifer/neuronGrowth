@@ -8,7 +8,7 @@ Chart::Chart() {
 	numberOfCharts = -1;
 	minArgument = -1;
 	maxArgument = -1;
-	maxValue = -1;
+	maxValue = -10000;
 	minValue = -10000;
 	numberOfArguments = -1;
 	tmpChartIndex = -1;
@@ -209,7 +209,8 @@ void LineChart::setParameters(int noc, double mA, double MA) {
 	maxArgument = MA;
 	maxActiveArgument = 0;
 	unitInterval = 1;
-	maxValue = -1;
+	maxValue = -10000;
+	onOneGraph = true;
 }
 
 void LineChart::addNextValue(double value, int chartIndex) {
@@ -225,6 +226,14 @@ void LineChart::addNextValue(double value, int chartIndex) {
 	else {
 		if(value < minValue) {minValue = value;}
 	}
+}
+
+void LineChart::differentGraphs() {
+	onOneGraph = false;
+}
+
+void LineChart::oneGraph() {
+	onOneGraph = true;
 }
 
 int LineChart::getMaxActiveArgument(int chartIndex) {

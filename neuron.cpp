@@ -29,6 +29,9 @@ Neuron::Neuron() {
 
 	numberOfConnections = 0;
 	connections = new Connection[numberOfConnections];
+
+	neuronPotential[0]	= IzhikevichV0;
+	Um[0]				= IzhikevichU0;
 	synapticCurrent = 0;
 
 	PRINTTRACE("neuron", "Neuron with id " + std::to_string(NeuronId) + " was created");
@@ -110,9 +113,38 @@ int Neuron::addConnection(int growthConeId, Neuron* neuron, int extraDelay) {
 	return 0;
 }
 
+double Neuron::izhik_Vm(){
+	ENTER_FUNCTION("neuron", "Neuron::izhik_Vm(). NeuronId = " + std::to_string(NeuronId));
+	double k	= IzhikevichK;
+	double Vr	= IzhikevichVr;
+	double Vt	= IzhikevichVt;
+	double Iex	= IzhikevichIex;
+	double Cm	= IzhikevichCm;
+	return (k*(neuronPotential[timer] - Vr)*(neuronPotential[timer] - Vt) - Um[timer] + Iex + synapticCurrent)/Cm;
+}
+ 
+double Neuron::izhik_Um(){
+	ENTER_FUNCTION("neuron", "Neuron::izhik_Um(). NeuronId = " + std::to_string(NeuronId));
+	double a	= IzhikevichA;
+	double b	= IzhikevichB;
+	double Vr	= IzhikevichVr;
+	return a*(b*(neuronPotential[timer] - Vr) - Um[timer]);
+}
+
 void Neuron::solvePotentialEquation() {
-	neuronPotential[timer] = rand()%20;
-	synapticCurrent = 0;
+	double h		= IzhikevichH;
+	double Vpeak	= IzhikevichVpeak;
+	double c		= IzhikevichC;
+	double d		= IzhikevichD;
+	neuronPotential[timer + 1] = neuronPotential[timer] + h * izhik_Vm();
+	Um			   [timer + 1] = Um[timer]				+ h * izhik_Um();
+
+	if (neuronPotential[timer + 1] > Vpeak) {
+		neuronPotential[timer + 1] = c;
+		Um[timer + 1] = Um[timer] + d;
+	}
+
+	synapticCurrent = 60;
 }
 
 /************************************/

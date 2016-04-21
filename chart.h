@@ -53,6 +53,7 @@ class LineChart : public Chart {
 private:
 	double unitInterval;
 	int *maxActiveArgument;
+	bool onOneGraph;
 	
 	void setParameters(int noc, double mA, double MA);
 public:
@@ -60,6 +61,8 @@ public:
 	LineChart(int noc, double mA, double MA);
 	~LineChart();
 
+	void differentGraphs();
+	void oneGraph();
 	void addNextValue(double value, int chartIndex = -1);
 	int getMaxActiveArgument(int chartIndex = 0);
 };

@@ -1,11 +1,23 @@
 #ifndef SETTINGS_H
 #define SETTINGS_H
 
-/* Picture settings */
+/************************************/
+/*			Picture settings		*/
+/************************************/
+
 #define PICTURESCALEX	40
 #define PICTURESCALEY	40
 #define ENVIRONMENTINTENSITYMULTIPLIER	10
-/* End of picture settings */
+#define NUMBEROFXVALUELABELS	4
+#define NUMBEROFYVALUELABELS	4
+
+/************************************/
+/*		End of picture settings		*/
+/************************************/
+
+/************************************/
+/*			General settings		*/
+/************************************/
 
 #define NUMBEROFDIMENSIONS 2
 
@@ -42,12 +54,6 @@
 #define CONNECTIVITYGRAPHSTATISTICS
 #endif
 
-#define LOGFILENAME     "stat/log.txt"
-#define LENGTHSTATISTICSFILE  "stat/length.txt"
-#define ENVIRONMENTSTATISTICSFILE  "stat/environment.txt"
-#define CONNECTIVITYGRAPHSTATISTICSFILE  "stat/connectivitygraph.txt"
-#define CONNECTIVITYGRAPHSTATISTICSRATE 5
-
 //#define CONNECTIVITYTEST1
 #ifdef CONNECTIVITYTEST1
 #undef MAXNUMBEROFNEURONS
@@ -56,4 +62,46 @@
 
 //#define AXONGROWTH
 //#define DENDRITEGROWTH
+
+/************************************/
+/*		End of general settings		*/
+/************************************/
+
+/************************************/
+/*		 Output file settings		*/
+/************************************/
+
+#define LOGFILENAME     "stat/log.txt"
+#define LENGTHSTATISTICSFILE  "stat/length.txt"
+#define ENVIRONMENTSTATISTICSFILE  "stat/environment.txt"
+#define CONNECTIVITYGRAPHSTATISTICSFILE  "stat/connectivitygraph.txt"
+#define CONNECTIVITYGRAPHSTATISTICSRATE 5
+
+/************************************/
+/*		End of output file settings	*/
+/************************************/
+
+/************************************/
+/*		Izhikevich model constants	*/
+/************************************/
+
+#define IzhikevichH			1
+#define IzhikevichIex		0
+#define IzhikevichA			0.02
+#define IzhikevichB			0.5
+#define IzhikevichC			-40
+#define IzhikevichD			100
+#define IzhikevichK			0.5
+#define IzhikevichVr		-60
+#define IzhikevichVt		-45
+#define IzhikevichVpeak		-35
+#define IzhikevichV0		-60
+#define IzhikevichU0		0
+#define IzhikevichCm		50
+
+/************************************/
+/*End of Izhikevich model constants	*/
+/************************************/
+
+
 #endif

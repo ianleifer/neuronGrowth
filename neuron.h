@@ -22,7 +22,10 @@ private:
 	Dendrite *dendrites;
 
 	double synapticCurrent;
-	double neuronPotential[WORKTIME];
+	double neuronPotential[WORKTIME + 1];
+	double Um[WORKTIME + 1];
+	double izhik_Vm();
+	double izhik_Um();
 	void solvePotentialEquation();
 	int numberOfConnections;
 	//Connection *connections;
