@@ -24,7 +24,7 @@ Hippocampus::Hippocampus() {
 		for(int j = 0; j < NUMBEROFCELLSY; j++)
 			neuronIds[i][j] = 0;
 	output = output->getOutput();
-};
+}
 
 #include "cellStack.h"
 void Hippocampus::checkStack() {
@@ -68,7 +68,7 @@ void Hippocampus::checkStack() {
 			break;
 		}
 	}
-};
+}
 
 int Hippocampus::addNeuron(int x, int y) {
 	ENTER_FUNCTION("hippocampus", "addNeuron(int x, int y). x = " + std::to_string(x) + ", y = " + std::to_string(y));
@@ -121,7 +121,7 @@ void Hippocampus::createNeuron() {
 		delete [] tmpNeurons;
 	}
 	PRINTTRACE("hippocampus", "Hippocampus now has " + std::to_string(numberOfNeurons) + " neurons");
-};
+}
 
 Neuron* Hippocampus::getNeuronById(int neuronId) {
 	Neuron* neuron = NULL;
@@ -132,7 +132,7 @@ Neuron* Hippocampus::getNeuronById(int neuronId) {
 		}
 	};
 	return neuron;
-};
+}
 
 /************************/
 /*      Interface       */
@@ -141,12 +141,14 @@ Neuron* Hippocampus::getNeuronById(int neuronId) {
 void Hippocampus::tick(int t) {
 	ENTER_FUNCTION("hippocampus", "Hippocampus tick");
 	if (numberOfNeurons == 0) {
-#ifdef CONNECTIVITYTEST1
-		addNeuron(NUMBEROFCELLSX/2 - 50, NUMBEROFCELLSY/2);
-		addNeuron(NUMBEROFCELLSX/2 + 50, NUMBEROFCELLSY/2);
-#else
-		addNeuron(NUMBEROFCELLSX/2, NUMBEROFCELLSY/2);
-#endif
+
+	#ifdef CONNECTIVITYTEST1
+			addNeuron(NUMBEROFCELLSX/2 - 50, NUMBEROFCELLSY/2);
+			addNeuron(NUMBEROFCELLSX/2 + 50, NUMBEROFCELLSY/2);
+	#else
+			addNeuron(NUMBEROFCELLSX/2, NUMBEROFCELLSY/2);
+	#endif
+
 		for (int i = 0; i < MAXNUMBEROFNEURONS; i++) {
 			addNeuron();
 		}
@@ -154,11 +156,12 @@ void Hippocampus::tick(int t) {
 	for(int i = 0; i < numberOfNeurons; i++)
 		neurons[i].tick();
 	checkStack();
-#ifdef CONNECTIVITYGRAPHSTATISTICS
-	if( (t % CONNECTIVITYGRAPHSTATISTICSRATE) == 1 ) {printConnectivityGraphStatistics();}
-#endif
+
+	#ifdef CONNECTIVITYGRAPHSTATISTICS
+		if( (t % CONNECTIVITYGRAPHSTATISTICSRATE) == 1 ) {printConnectivityGraphStatistics();}
+	#endif
 	//if(numberOfNeurons == 0) {addNeuron(2, 5); addNeuron(2, 15); addNeuron(2, 25); addNeuron(7, 25); addNeuron(3, 25);}
-};
+}
 
 void Hippocampus::printConnectivityGraphStatistics() {
 	ENTER_FUNCTION("hippocampus", "printConnectivityGraphStatistics()");
@@ -202,8 +205,15 @@ void Hippocampus::printConnectivityGraphStatistics() {
 		delete [] connections;
 		delete [] numberOfConnections;
 	}
-};
+}
+
+void Hippocampus::feelPotentialsChart(LineChart &lineChart) {
+	for(int i = 0; i < MAXNUMBEROFNEURONS; i++) {
+		lineChart.setTmpChartIndex(i);
+		neurons[i].pushPotentialToChart(lineChart);
+	}
+}
 
 int Hippocampus::getFieldType(int x, int y) {
 	return neuronType[x][y];
-};
+}

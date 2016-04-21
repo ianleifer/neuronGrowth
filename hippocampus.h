@@ -6,6 +6,7 @@
 #include "cmn_defines.h"
 #include "cmn_struct.h"
 #include "output.h"
+#include "chart.h"
 
 class Hippocampus {
 private:
@@ -28,6 +29,7 @@ public:
 	static Hippocampus* getHippocampus();
 	int getFieldType(int x, int y);
 	void printConnectivityGraphStatistics();
+	void feelPotentialsChart(LineChart &lineChart);
 	void tick(int t);
 };
 

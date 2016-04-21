@@ -3,6 +3,7 @@
 
 #include "cmn_struct.h"
 #include "neurite.h"
+#include "chart.h"
 
 class Neuron {
 private:
@@ -10,6 +11,7 @@ private:
 	int NeuronId;
 	Coordinates coord;
 	int neuronType;
+	int timer;
 
 	int addAxon(Coordinates coordinates);
 	int numberOfAxons;
@@ -19,6 +21,9 @@ private:
 	int numberOfDendrites;
 	Dendrite *dendrites;
 
+	double synapticCurrent;
+	double neuronPotential[WORKTIME];
+	void solvePotentialEquation();
 	int numberOfConnections;
 	//Connection *connections;
 	struct Connection {
@@ -49,7 +54,8 @@ public:
 	int getConnectionDestination(int connectionId);
 	int getConnectionDelay(int connectionId);
 	//struct Connection getConnection(int connectionId);
-
+	
+	void pushPotentialToChart(LineChart &lineChart);
 	void tick();
 };
 

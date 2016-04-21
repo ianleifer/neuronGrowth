@@ -290,7 +290,7 @@ LRESULT CALLBACK OpenGLInterface::StaticWndProc(HWND hWnd, UINT Msg, WPARAM wPar
       return this_window->WndProc(hWnd, Msg, wParam, lParam);
 }
 
-void OpenGLInterface::getFields() {
+void OpenGLInterface::getCells() {
 	for(int i = 0; i < NUMBEROFCELLSX; i++)
 		for(int j = 0; j < NUMBEROFCELLSY; j++)
 			picture[i][j] = hippocampus->getFieldType(i, j);
@@ -302,16 +302,17 @@ void OpenGLInterface::getFields() {
 }
 
 void OpenGLInterface::printPicture() {
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glLoadIdentity();
 	glEnable(GL_ALPHA_TEST);
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_DST_ALPHA);
 
-	Color color(0, 1, 0);
 	FigureRectangle rectangle(-1, -1, 0, 1);
-	rectangle.setColor(color);
-	
 	drawNeuronPicture(rectangle);
+
+	rectangle.setFigure(0, -1, 1, 1);
+	drawPotentialLineChart(rectangle);
 
 	glDisable(GL_BLEND);
 	glDisable(GL_ALPHA_TEST);
@@ -323,9 +324,10 @@ void OpenGLInterface::printPicture() {
 }
 
 void OpenGLInterface::drawNeuronPicture(FigureRectangle rectangle) {
+	getCells();
 	for(int j = 0; j < NUMBEROFCELLSY; j++)
-	for(int i = 0; i < NUMBEROFCELLSX; i++)
-		drawPixel(rectangle, i, j, picture[i][j]);
+		for(int i = 0; i < NUMBEROFCELLSX; i++)
+			drawPixel(rectangle, i, j, picture[i][j]);
 	
 	#ifdef DIFFUSIONVISIBLE
 		for(int type = 0; type < NUMBEROFNEURONTYPES; type++)
@@ -354,6 +356,7 @@ void OpenGLInterface::drawPixel(FigureRectangle rectangle, int x, int y, int typ
 	switch(type) {
 	case NOTHING:
 		glColor3f(0, 0, 0);
+		return;
 		break;
 	case NEURON:
 		glColor3f(1, 1, 1);
@@ -394,7 +397,77 @@ void OpenGLInterface::drawPixel(FigureRectangle rectangle, int x, int y, int typ
 	glEnd();
 }
 
+void OpenGLInterface::drawPotentialLineChart(FigureRectangle rectangle) {
+	LineChart lineChart(MAXNUMBEROFNEURONS, 0, WORKTIME);
+	hippocampus->feelPotentialsChart(lineChart);
+	drawLineChart(lineChart, rectangle);
+}
+
+void OpenGLInterface::drawLineChart(LineChart &lineChart, FigureRectangle rectangle) {
+	/* Put coursor back to (0, 0, 0) */
+    glLoadIdentity();
+
+	drawArgumentLabels(lineChart.getMinArgument(), lineChart.getMaxActiveArgument(), 4, rectangle);
+	drawValueLabels(lineChart.getMinValue(), lineChart.getMaxValue(), 4, rectangle);
+	rectangle.resize(0.9, 0.93);
+
+	double startX = rectangle.getMiddleX() - rectangle.getSizeX() / 2;
+	double startY = rectangle.getMiddleY() - rectangle.getSizeY() / 2;
+	double scaleY = rectangle.getSizeY();
+	double maxValue = lineChart.getMaxValue();
+	double minValue = lineChart.getMinValue();
+
+	for(int j = 0; j < lineChart.getNumberOfCharts(); j++) {
+		int numberOfArguments = lineChart.getMaxActiveArgument(j);
+		double widthStep = rectangle.getSizeX() / numberOfArguments;
+		glLineWidth(1);
+		Color color = lineChart.getColor(j);
+		glColor3f(color.getRed(), color.getGreen(), color.getBlue());
+		for(int i = 1; i < numberOfArguments; i++) {
+			glBegin(GL_LINES);
+				glVertex3f(startX + (i - 1) * widthStep,
+				startY + ( lineChart.getValue(j, i - 1) - minValue ) / ( maxValue - minValue ) * scaleY, 0);
+				glVertex3f(startX + i       * widthStep,
+				startY + ( lineChart.getValue(j, i)     - minValue ) / ( maxValue - minValue ) * scaleY, 0);
+			glEnd();
+		}
+	}
+}
+
+void OpenGLInterface::drawText(const char *text, int length, float x, float y) {
+	glColor3f(1, 1, 1);
+	glLoadIdentity();
+	glRasterPos2f(x, y);
+	for(int i = 0; i < length; i++)
+	{
+		glutBitmapCharacter(GLUT_BITMAP_9_BY_15, (int)text[i]);
+	}
+}
+
+void OpenGLInterface::drawArgumentLabels(double minArgument, double maxArgument, int numberOfBins, FigureRectangle rectangle) {
+	double startX = rectangle.getMiddleX() - rectangle.getSizeX() / 2;
+	double deltaX = rectangle.getSizeX() / double(numberOfBins);
+	double y = rectangle.getMiddleY() - rectangle.getSizeY() / 2;
+	double delta = (maxArgument - minArgument) / double(numberOfBins);
+	for(int i = 0; i < numberOfBins; i++) {
+		char bufer[10];
+		_itoa_s(minArgument + delta * i, bufer, 10, 10);
+		drawText(bufer, sizeof(bufer) / sizeof(char), startX + deltaX * i, y);
+	}
+}
+
+void OpenGLInterface::drawValueLabels(double minValue, double maxValue, int numberOfBins, FigureRectangle rectangle) {
+	double startY = rectangle.getMiddleY() - rectangle.getSizeY() / 2;
+	double deltaY = rectangle.getSizeY() / double(numberOfBins);
+	double x = rectangle.getMiddleX() - rectangle.getSizeX() / 2;
+	double delta = (maxValue - minValue) / double(numberOfBins);
+	for(int i = 0; i < numberOfBins; i++) {
+		char bufer[10];
+		_itoa_s(minValue + delta * i, bufer, 10, 10);
+		drawText(bufer, sizeof(bufer) / sizeof(char), x + 0.02, startY + deltaY * i);
+	}
+}
+
 void OpenGLInterface::tick() {
-	getFields();
 	printPicture();
 }

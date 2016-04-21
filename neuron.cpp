@@ -5,12 +5,13 @@ int Neuron::NeuronCounter = 0;
 
 void Neuron::resetIdCounter() {
    NeuronCounter = 0;
-};
+}
 
 /* For random */
 #include <cstdlib>
 Neuron::Neuron() {
 	output = output->getOutput();
+	timer = 0;
 	ENTER_FUNCTION("neuron", "Neuron::Neuron()");
 	if (NeuronCounter < MAXNUMBEROFNEURONS) {
 		NeuronId = NeuronCounter++;
@@ -28,9 +29,10 @@ Neuron::Neuron() {
 
 	numberOfConnections = 0;
 	connections = new Connection[numberOfConnections];
+	synapticCurrent = 0;
 
 	PRINTTRACE("neuron", "Neuron with id " + std::to_string(NeuronId) + " was created");
-};
+}
 
 Neuron::~Neuron() {
 	NeuronCounter--;
@@ -67,7 +69,7 @@ int Neuron::addAxon(Coordinates coordinates) {
 	
 	PRINTTRACE("neuron", "Neuron id " + std::to_string(NeuronId) + " now has new axon. The number of axons: " + std::to_string(numberOfAxons));
 	return 0;
-};
+}
 
 int Neuron::addDendrite(Coordinates coordinates) {
 	ENTER_FUNCTION("neuron", "addDendrite(Coordinates coordinates)");
@@ -80,7 +82,7 @@ int Neuron::addDendrite(Coordinates coordinates) {
 	
 	PRINTTRACE("neuron", "Neuron id " + std::to_string(NeuronId) + " now has new dendrite. The number of dendrites: " + std::to_string(numberOfDendrites));
 	return 0;
-};
+}
 
 int Neuron::addConnection(int growthConeId, Neuron* neuron, int extraDelay) {
 	ENTER_FUNCTION("neuron", "addConnection(int growthConeId, Neuron* neuron). Source: neuronId = " + std::to_string(NeuronId) + ", Destination: neuronId = " + std::to_string(neuron->getNeuronId()) + "; growthConeId = " + std::to_string(growthConeId));
@@ -106,13 +108,23 @@ int Neuron::addConnection(int growthConeId, Neuron* neuron, int extraDelay) {
 	
 	PRINTTRACE("neuron", "Neuron id " + std::to_string(NeuronId) + " now has new connection with delay " + std::to_string(connections[numberOfConnections - 1].delay) + ". The number of connections: " + std::to_string(numberOfConnections) + "");
 	return 0;
-};
+}
 
+void Neuron::solvePotentialEquation() {
+	neuronPotential[timer] = rand()%20;
+	synapticCurrent = 0;
+}
+
+/************************************/
+/*				Interface			*/
+/************************************/
 void Neuron::tick() {
 	ENTER_FUNCTION("neuron", "Neuron::tick(). NeuronId = " + std::to_string(NeuronId));
 	Environment *environment;
 	environment = environment->getEnvironment();
 	environment->addSource(coord, neuronType);
+	solvePotentialEquation();
+	timer++;
 
 	#ifndef CONNECTIVITYTEST1
 	#ifdef AXONGROWTH
@@ -149,7 +161,7 @@ void Neuron::tick() {
 			}
 		}
 	#endif
-};
+}
 
 Neuron& Neuron::operator=(Neuron &neuron) {
 	NeuronId          = neuron.getNeuronId();
@@ -170,47 +182,52 @@ Neuron& Neuron::operator=(Neuron &neuron) {
 		connections[i].delay  = neuron.getConnection(i).delay;
 	}*/
 	return *this;
-};
+}
+
+void Neuron::pushPotentialToChart(LineChart &lineChart) {
+	for(int i = 0; i < timer; i++)
+		lineChart.addNextValue(neuronPotential[i]);
+}
 
 int Neuron::getNeuronId() {
 	return NeuronId;
-};
+}
 
 Coordinates Neuron::getCoordinates() {
 	return coord;
-};
+}
 
 int Neuron::getNeuronType() {
 	return neuronType;
-};
+}
 
 int Neuron::getNumberOfAxons() {
 	return numberOfAxons;
-};
+}
 
 int Neuron::getNumberOfDendrites() {
 	return numberOfDendrites;
-};
+}
 
 Axon Neuron::getAxon(int neuriteId) {
 	return axons[neuriteId];
-};
+}
 
 Dendrite Neuron::getDendrite(int neuriteId) {
 	return dendrites[neuriteId];
-};
+}
 
 int Neuron::getNumberOfConnections() {
 	return numberOfConnections;
-};
+}
 
 int Neuron::getConnectionDestination(int connectionId) {
 	return connections[connectionId].neuron->getNeuronId();
-};
+}
 
 int Neuron::getConnectionDelay(int connectionId){
 	return connections[connectionId].delay;
-};
+}
 
 /*struct Connection Neuron::getConnection(int connectionId) {
 	return connections[connectionId];
