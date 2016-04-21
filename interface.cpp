@@ -15,7 +15,7 @@ OpenGLInterface::OpenGLInterface() {
 	
 	//CreateGLWindow(L"OpenGL window", 800, 600, 32, fullscreen);
 	/* X scale is multiplied by 2 to draw the chart in the right side of the picture */
-	CreateGLWindow(L"OpenGL window", NUMBEROFCELLSX * PICTURESCALEX * 2, NUMBEROFCELLSY * PICTURESCALEY, 32, fullscreen);
+	CreateGLWindow(L"OpenGL window", NUMBEROFCELLSX * PICTURESCALEX, NUMBEROFCELLSY * PICTURESCALEY, 32, fullscreen);
 
 	hippocampus = hippocampus->getHippocampus();
 	environment = environment->getEnvironment();

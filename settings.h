@@ -2,27 +2,13 @@
 #define SETTINGS_H
 
 /************************************/
-/*			Picture settings		*/
-/************************************/
-
-#define PICTURESCALEX	3
-#define PICTURESCALEY	3
-#define ENVIRONMENTINTENSITYMULTIPLIER	10
-#define NUMBEROFXVALUELABELS	4
-#define NUMBEROFYVALUELABELS	4
-
-/************************************/
-/*		End of picture settings		*/
-/************************************/
-
-/************************************/
 /*			General settings		*/
 /************************************/
 
 #define NUMBEROFDIMENSIONS 2
 
-#define NUMBEROFCELLSX 200
-#define NUMBEROFCELLSY 200
+#define NUMBEROFCELLSX 20
+#define NUMBEROFCELLSY 20
 
 #define WORKTIME 50000
 
@@ -65,6 +51,22 @@
 
 /************************************/
 /*		End of general settings		*/
+/************************************/
+
+/************************************/
+/*			Picture settings		*/
+/************************************/
+
+#define PICTURESIZEX	1600
+#define PICTURESIZEY	1000
+#define PICTURESCALEX	PICTURESIZEX / NUMBEROFCELLSX
+#define PICTURESCALEY	PICTURESIZEY / NUMBEROFCELLSY
+#define ENVIRONMENTINTENSITYMULTIPLIER	10
+#define NUMBEROFXVALUELABELS	4
+#define NUMBEROFYVALUELABELS	4
+
+/************************************/
+/*		End of picture settings		*/
 /************************************/
 
 /************************************/
