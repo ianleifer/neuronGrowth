@@ -144,7 +144,7 @@ void Hippocampus::addSynaps(Neuron *source, Neuron *destination, double delay) {
 
 void Hippocampus::fireSynapses() {
 	for(int i = 0; i < numberOfSynapses; i++)
-		if(synapses[i].getSource()->isFired()) {synapses[i].getDestination()->transferPerturbation();}
+		synapses[i].tick();
 }
 
 /************************/
@@ -165,11 +165,16 @@ void Hippocampus::tick(int t) {
 		for (int i = 0; i < MAXNUMBEROFNEURONS; i++) {
 			addNeuron();
 		}
-		for(int i = 0; i < 4; i++)
-			addSynaps(neurons + rand()%4, neurons + rand()%4);
+
+		/*for(int i = 0; i < 4; i++)
+			addSynaps(neurons + rand()%4, neurons + rand()%4);*/
+		#ifdef SYNAPTICDISTURBANCETEST1
+		addSynaps(getNeuronById(0), getNeuronById(1));
+		#endif
 	}
 	for(int i = 0; i < numberOfNeurons; i++)
 		neurons[i].tick();
+	fireSynapses();
 	checkStack();
 
 	#ifdef CONNECTIVITYGRAPHSTATISTICS

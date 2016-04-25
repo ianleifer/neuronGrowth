@@ -13,6 +13,18 @@ void Synaps::Set(Neuron *Source, Neuron *Destination, double Delay) {
 	delay = Delay;
 }
 
+void Synaps::transferPerturbation() {
+	double g = IzhikevichG;
+	double sourcePotential = source->getPotential();
+	double destinationPotential = destination->getPotential();
+	double current = g * ( sourcePotential - destinationPotential );
+	destination->transferPerturbation(current);
+}
+
+void Synaps::tick() {
+	transferPerturbation();
+}
+
 void Synaps::printSynaps() {
 	PRINTSTATISTICS(CONNECTIVITYGRAPHSTATICSFILEID, std::to_string(source->getNeuronId()) + "\t" + std::to_string(destination->getNeuronId()) + "\t" + std::to_string(delay));
 }

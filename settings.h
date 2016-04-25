@@ -46,6 +46,12 @@
 #define MAXNUMBEROFNEURONS 2
 #endif
 
+#define SYNAPTICDISTURBANCETEST1
+#ifdef SYNAPTICDISTURBANCETEST1
+#undef MAXNUMBEROFNEURONS
+#define MAXNUMBEROFNEURONS 2
+#endif
+
 //#define AXONGROWTH
 //#define DENDRITEGROWTH
 
@@ -57,8 +63,8 @@
 /*			Picture settings		*/
 /************************************/
 
-#define PICTURESIZEX	1600
-#define PICTURESIZEY	1000
+#define PICTURESIZEX	1200
+#define PICTURESIZEY	600
 #define PICTURESCALEX	PICTURESIZEX / NUMBEROFCELLSX
 #define PICTURESCALEY	PICTURESIZEY / NUMBEROFCELLSY
 #define ENVIRONMENTINTENSITYMULTIPLIER	10
@@ -79,7 +85,7 @@
 #define LENGTHSTATISTICSFILE  "stat/length.txt"
 #define ENVIRONMENTSTATISTICSFILE  "stat/environment.txt"
 #define CONNECTIVITYGRAPHSTATISTICSFILE  "stat/connectivitygraph.txt"
-#define CONNECTIVITYGRAPHSTATISTICSRATE 5
+#define CONNECTIVITYGRAPHSTATISTICSRATE 100
 
 /************************************/
 /*		End of output file settings	*/
@@ -98,12 +104,12 @@
 #define IzhikevichK			0.5
 #define IzhikevichVr		-60
 #define IzhikevichVt		-45
-#define IzhikevichVpeak		-35
+#define IzhikevichVpeak		0
 #define IzhikevichV0		-60
 #define IzhikevichU0		0
 #define IzhikevichCm		50
-#define IzhikevichNoise		0
-#define IzhikevichCurrentPerSynaps	20
+#define IzhikevichNoise		15
+#define IzhikevichG			5
 
 /************************************/
 /*End of Izhikevich model constants	*/

@@ -41,7 +41,7 @@ public:
 	void pushPotentialToChart(LineChart &lineChart);
 	void tick();
 	void addSynaps();
-	void transferPerturbation();
+	void transferPerturbation(double current = 0);
 
 	Neuron& operator=(Neuron &neuron);
 	int getNeuronId();
@@ -52,6 +52,7 @@ public:
 	Axon getAxon(int neuriteId);
 	Dendrite getDendrite(int neuriteId);
 	int getNumberOfSynapses();
+	double getPotential(int Timer = -1);
 	bool isFired();
 };
 

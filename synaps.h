@@ -12,12 +12,14 @@ private:
 	Neuron *destination;
 	double delay;
 	//double probability;
+	void transferPerturbation();
 public:
 	Synaps();
 	Synaps(Neuron *Source, Neuron *Destination, double Delay = -1);
 	void Set(Neuron *Source, Neuron *Destination, double Delay = -1);
 
 	void printSynaps();
+	void tick();
 
 	Synaps& operator=(Synaps &synaps);
 	Neuron* getSource();

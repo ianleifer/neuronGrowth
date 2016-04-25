@@ -110,6 +110,9 @@ void Neuron::solvePotentialEquation() {
 	double c		= IzhikevichC;
 	double d		= IzhikevichD;
 	double noise	= (IzhikevichNoise != 0) ? (- IzhikevichNoise / 2 + rand()%IzhikevichNoise) : 0;
+	#ifdef SYNAPTICDISTURBANCETEST1
+		if(NeuronId == 1) {noise = 0;}
+	#endif
 	fired = false;
 	neuronPotential[timer + 1] = neuronPotential[timer] + h * izhik_Vm() + noise;
 	Um			   [timer + 1] = Um[timer]				+ h * izhik_Um();
@@ -119,7 +122,7 @@ void Neuron::solvePotentialEquation() {
 		Um[timer + 1] = Um[timer] + d;
 		fired = true;
 	}
-	synapticCurrent = 50;
+	synapticCurrent = 0;
 }
 
 /************************************/
@@ -174,8 +177,8 @@ void Neuron::addSynaps() {
 	numberOfSynapses++;
 }
 
-void Neuron::transferPerturbation() {
-	synapticCurrent += IzhikevichCurrentPerSynaps;
+void Neuron::transferPerturbation(double current) {
+	synapticCurrent += current;
 }
 
 Neuron& Neuron::operator=(Neuron &neuron) {
@@ -230,6 +233,12 @@ Dendrite Neuron::getDendrite(int neuriteId) {
 
 int Neuron::getNumberOfSynapses() {
 	return numberOfSynapses;
+}
+
+double Neuron::getPotential(int Timer) {
+	if(Timer == -1) {return neuronPotential[timer];}
+	if(Timer < 0 || Timer > WORKTIME) {return NULL;}
+	return neuronPotential[Timer];
 }
 
 bool Neuron::isFired() {
