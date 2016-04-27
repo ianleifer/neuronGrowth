@@ -22,6 +22,7 @@ private:
 	void addSynaps(int sourceId, int destinationId, double delay = -1);
 
 	Output *output;
+	Configurator *configurator;
 
 	/* TODO: Hippocampus must contain cells. It is more logical */
 	int neuronType[NUMBEROFCELLSX][NUMBEROFCELLSY];

@@ -25,6 +25,7 @@ Hippocampus::Hippocampus() {
 		for(int j = 0; j < NUMBEROFCELLSY; j++)
 			neuronIds[i][j] = 0;
 	output = output->getOutput();
+	configurator = configurator->getConfigurator();
 }
 
 Hippocampus::~Hippocampus() {
@@ -164,11 +165,16 @@ void Hippocampus::tick(int t) {
 			addNeuron();
 		}
 
-		for(int i = 0; i < MAXNUMBEROFNEURONS; i++)
-			addSynaps(rand()%MAXNUMBEROFNEURONS, rand()%MAXNUMBEROFNEURONS);
 		#ifdef SYNAPTICDISTURBANCETEST1
-		addSynaps(getNeuronById(0), getNeuronById(1));
+		addSynaps(0, 1);
 		#endif
+		if(configurator->areConnectionsConfigured()) {
+			for(int i = 0; i < configurator->getNumberOfConnections(); i++)
+				addSynaps(configurator->getSource(i), configurator->getDestination(i), configurator->getDelay(i));
+		} else {
+			for(int i = 0; i < MAXNUMBEROFNEURONS; i++)
+				addSynaps(rand()%MAXNUMBEROFNEURONS, rand()%MAXNUMBEROFNEURONS);
+		}
 	}
 	for(int i = 0; i < numberOfNeurons; i++)
 		neurons[i].tick();
