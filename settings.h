@@ -12,7 +12,7 @@
 
 #define WORKTIME 50000
 
-#define MAXNUMBEROFNEURONS 4
+#define MAXNUMBEROFNEURONS 3
 #define MAXNUMBEROFGROWTHCONES 16
 
 #define NUMBEROFNEURONTYPES 2
@@ -46,10 +46,10 @@
 #define MAXNUMBEROFNEURONS 2
 #endif
 
-#define SYNAPTICDISTURBANCETEST1
+//#define SYNAPTICDISTURBANCETEST1
 #ifdef SYNAPTICDISTURBANCETEST1
 #undef MAXNUMBEROFNEURONS
-#define MAXNUMBEROFNEURONS 3
+#define MAXNUMBEROFNEURONS 2
 #endif
 
 //#define AXONGROWTH
@@ -104,7 +104,7 @@
 #define IzhikevichK			0.5
 #define IzhikevichVr		-60
 #define IzhikevichVt		-45
-#define IzhikevichVpeak		0
+#define IzhikevichVpeak		30
 #define IzhikevichV0		-60
 #define IzhikevichU0		0
 #define IzhikevichCm		50
