@@ -79,6 +79,7 @@
     <ClCompile Include="cellStack.cpp" />
     <ClCompile Include="chart.cpp" />
     <ClCompile Include="cmn_struct.cpp" />
+    <ClCompile Include="configuration.cpp" />
     <ClCompile Include="interfaceClasses.cpp" />
     <ClCompile Include="synaps.cpp" />
     <ClCompile Include="coordinates.cpp" />
@@ -100,6 +101,7 @@
     <ClInclude Include="chart.h" />
     <ClInclude Include="cmn_defines.h" />
     <ClInclude Include="cmn_struct.h" />
+    <ClInclude Include="configuration.h" />
     <ClInclude Include="interfaceClasses.h" />
     <ClInclude Include="synaps.h" />
     <ClInclude Include="coordinates.h" />

@@ -52,18 +52,14 @@ void Hippocampus::checkStack() {
 			// Case we need to create a new connection
 			// Axon can be connected to dendrite
 			if(cell.getNeuronId() != neuronIds[x][y] && cell.getCellType() == AXON) {
-				Neuron* source      = getNeuronById(cell.getNeuronId());
-				Neuron* destination = getNeuronById(neuronIds[x][y]);
-				addSynaps(source, destination);
+				addSynaps(cell.getNeuronId(), neuronIds[x][y]);
 			}
 			break;
 		case AXON:
 			// Case we need to create a new connection
 			// Dendrite can be connected to axon
 			if(cell.getNeuronId() != neuronIds[x][y] && cell.getCellType() == DENDRITE) {
-				Neuron* source      = getNeuronById(neuronIds[x][y]);
-				Neuron* destination = getNeuronById(cell.getNeuronId());
-				addSynaps(source, destination);
+				addSynaps(neuronIds[x][y], cell.getNeuronId());
 			}
 			break;
 		}
@@ -134,7 +130,9 @@ Neuron* Hippocampus::getNeuronById(int neuronId) {
 	return neuron;
 }
 
-void Hippocampus::addSynaps(Neuron *source, Neuron *destination, double delay) {
+void Hippocampus::addSynaps(int sourceId, int destinationId, double delay) {
+	Neuron *source = getNeuronById(sourceId);
+	Neuron *destination = getNeuronById(destinationId);
 	if(numberOfSynapses != 0) {dynamicArrayRealloc(Synaps, synapses, numberOfSynapses);}
 	else {synapses = new Synaps; numberOfSynapses++;}
 	synapses[numberOfSynapses - 1].Set(source, destination, delay);
@@ -166,13 +164,11 @@ void Hippocampus::tick(int t) {
 			addNeuron();
 		}
 
-		/*for(int i = 0; i < 4; i++)
-			addSynaps(neurons + rand()%4, neurons + rand()%4);*/
+		for(int i = 0; i < MAXNUMBEROFNEURONS; i++)
+			addSynaps(rand()%MAXNUMBEROFNEURONS, rand()%MAXNUMBEROFNEURONS);
 		#ifdef SYNAPTICDISTURBANCETEST1
 		addSynaps(getNeuronById(0), getNeuronById(1));
 		#endif
-		addSynaps(getNeuronById(0), getNeuronById(1));
-		addSynaps(getNeuronById(1), getNeuronById(2));
 	}
 	for(int i = 0; i < numberOfNeurons; i++)
 		neurons[i].tick();

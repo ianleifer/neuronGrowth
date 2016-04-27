@@ -19,7 +19,7 @@ private:
 
 	int numberOfSynapses;
 	Synaps *synapses;
-	void addSynaps(Neuron *source, Neuron *destination, double delay = -1);
+	void addSynaps(int sourceId, int destinationId, double delay = -1);
 
 	Output *output;
 

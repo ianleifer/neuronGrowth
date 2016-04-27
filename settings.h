@@ -1,6 +1,8 @@
 #ifndef SETTINGS_H
 #define SETTINGS_H
 
+#include "configuration.h"
+
 /************************************/
 /*			General settings		*/
 /************************************/
@@ -63,8 +65,8 @@
 /*			Picture settings		*/
 /************************************/
 
-#define PICTURESIZEX	1200
-#define PICTURESIZEY	600
+#define PICTURESIZEX	1400
+#define PICTURESIZEY	1000
 #define PICTURESCALEX	PICTURESIZEX / NUMBEROFCELLSX
 #define PICTURESCALEY	PICTURESIZEY / NUMBEROFCELLSY
 #define ENVIRONMENTINTENSITYMULTIPLIER	10
@@ -109,7 +111,7 @@
 #define IzhikevichU0		0
 #define IzhikevichCm		50
 #define IzhikevichNoise		15
-#define IzhikevichG			5
+#define IzhikevichG			3
 
 /************************************/
 /*End of Izhikevich model constants	*/

@@ -60,6 +60,9 @@
     <ClCompile Include="interfaceClasses.cpp">
       <Filter>Файлы исходного кода</Filter>
     </ClCompile>
+    <ClCompile Include="configuration.cpp">
+      <Filter>Файлы исходного кода</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="modeling.vcproj">
@@ -113,6 +116,9 @@
       <Filter>Заголовочные файлы</Filter>
     </ClInclude>
     <ClInclude Include="interfaceClasses.h">
+      <Filter>Заголовочные файлы</Filter>
+    </ClInclude>
+    <ClInclude Include="configuration.h">
       <Filter>Заголовочные файлы</Filter>
     </ClInclude>
   </ItemGroup>
