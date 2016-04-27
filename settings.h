@@ -81,10 +81,10 @@
 /*		 Output file settings		*/
 /************************************/
 
-#define LOGFILENAME     "stat/log.txt"
-#define LENGTHSTATISTICSFILE  "stat/length.txt"
-#define ENVIRONMENTSTATISTICSFILE  "stat/environment.txt"
-#define CONNECTIVITYGRAPHSTATISTICSFILE  "stat/connectivitygraph.txt"
+#define LOGFILENAME     "output/log.txt"
+#define LENGTHSTATISTICSFILE  "output/length.txt"
+#define ENVIRONMENTSTATISTICSFILE  "output/environment.txt"
+#define CONNECTIVITYGRAPHSTATISTICSFILE  "output/connectivitygraph.txt"
 #define CONNECTIVITYGRAPHSTATISTICSRATE 100
 
 /************************************/
