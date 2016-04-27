@@ -65,6 +65,7 @@ public:
 	void oneGraph();
 	void addNextValue(double value, int chartIndex = -1);
 	int getMaxActiveArgument(int chartIndex = 0);
+	bool isOneGraph();
 };
 
 #endif

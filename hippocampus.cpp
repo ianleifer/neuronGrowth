@@ -170,6 +170,7 @@ void Hippocampus::tick(int t) {
 			addSynaps(neurons + rand()%4, neurons + rand()%4);*/
 		#ifdef SYNAPTICDISTURBANCETEST1
 		addSynaps(getNeuronById(0), getNeuronById(1));
+		addSynaps(getNeuronById(1), getNeuronById(2));
 		#endif
 	}
 	for(int i = 0; i < numberOfNeurons; i++)

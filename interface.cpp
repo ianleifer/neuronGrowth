@@ -397,11 +397,24 @@ void OpenGLInterface::drawPixel(FigureRectangle rectangle, int x, int y, int typ
 
 void OpenGLInterface::drawPotentialLineChart(FigureRectangle rectangle) {
 	LineChart lineChart(MAXNUMBEROFNEURONS, 0, WORKTIME);
+	lineChart.differentGraphs();
 	hippocampus->feelPotentialsChart(lineChart);
-	drawLineChart(lineChart, rectangle);
+	if(lineChart.isOneGraph()) {
+		drawLineChart(lineChart, rectangle);
+	} else {
+		int numberOfCharts = lineChart.getNumberOfCharts();
+		double leftDownX = rectangle.getMiddleX() - rectangle.getSizeX() / 2;
+		double rightUpX = rectangle.getMiddleX() + rectangle.getSizeX() / 2;
+		double leftDownY = rectangle.getMiddleY() - rectangle.getSizeY() / 2;
+		double newSizeY = rectangle.getSizeY() / numberOfCharts;
+		for(int i = 0; i < numberOfCharts; i++) {
+			rectangle.setFigure(leftDownX, leftDownY + newSizeY * i, rightUpX, leftDownY + newSizeY * (i + 1));
+			drawLineChart(lineChart, rectangle, i);
+		}
+	}
 }
 
-void OpenGLInterface::drawLineChart(LineChart &lineChart, FigureRectangle rectangle) {
+void OpenGLInterface::drawLineChart(LineChart &lineChart, FigureRectangle rectangle, int chartIdx) {
 	/* Put coursor back to (0, 0, 0) */
     glLoadIdentity();
 
@@ -416,6 +429,7 @@ void OpenGLInterface::drawLineChart(LineChart &lineChart, FigureRectangle rectan
 	double minValue = lineChart.getMinValue();
 
 	for(int j = 0; j < lineChart.getNumberOfCharts(); j++) {
+		if(chartIdx != -1) {j = chartIdx;}
 		int numberOfArguments = lineChart.getMaxActiveArgument(j);
 		double widthStep = rectangle.getSizeX() / numberOfArguments;
 		glLineWidth(1);
@@ -429,6 +443,7 @@ void OpenGLInterface::drawLineChart(LineChart &lineChart, FigureRectangle rectan
 				startY + ( lineChart.getValue(j, i)     - minValue ) / ( maxValue - minValue ) * scaleY, 0);
 			glEnd();
 		}
+		if(chartIdx != -1) {break;}
 	}
 }
 

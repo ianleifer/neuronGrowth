@@ -239,3 +239,7 @@ void LineChart::oneGraph() {
 int LineChart::getMaxActiveArgument(int chartIndex) {
 	return maxActiveArgument[chartIndex];
 }
+
+bool LineChart::isOneGraph() {
+	return onOneGraph;
+}

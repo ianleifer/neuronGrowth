@@ -49,7 +49,7 @@ private:
 	void drawText(const char *text, int length, float x, float y);
 	void drawArgumentLabels(double minArgument, double maxArgument, int numberOfBins, FigureRectangle rectangle);
 	void drawValueLabels(double minValue, double maxValue, int numberOfBins, FigureRectangle rectangle);
-	void drawLineChart(LineChart &lineChart, FigureRectangle rectangle);
+	void drawLineChart(LineChart &lineChart, FigureRectangle rectangle, int chartIdx = -1);
 	/* End of picture creation */
 public:
 	OpenGLInterface();
