@@ -35,6 +35,9 @@ private:
 
 	/* Picture creation */
 	int picture[NUMBEROFCELLSX][NUMBEROFCELLSY];
+	double potentialPicture[NUMBEROFCELLSX][NUMBEROFCELLSY];
+	double minimumPotential;
+	double maximumPotential;
 	double environmentField[NUMBEROFCELLSX][NUMBEROFCELLSY][NUMBEROFNEURONTYPES];
 	void getCells();
 
@@ -43,7 +46,7 @@ private:
 	Output *output;
 	void printPicture();
 	void drawNeuronPicture(FigureRectangle rectangle);
-	void drawPixel(FigureRectangle rectangle, int x, int y, int type, int environmentType = -1, double intensity = -1);
+	void drawPixel(FigureRectangle rectangle, int x, int y, int type, double intensity = -1, int environmentType = -1);
 
 	void drawPotentialLineChart(FigureRectangle rectangle);
 	void drawText(const char *text, int length, float x, float y);

@@ -291,9 +291,17 @@ LRESULT CALLBACK OpenGLInterface::StaticWndProc(HWND hWnd, UINT Msg, WPARAM wPar
 }
 
 void OpenGLInterface::getCells() {
+	minimumPotential = IzhikevichVpeak;
+	maximumPotential = IzhikevichV0 - 100;
 	for(int i = 0; i < NUMBEROFCELLSX; i++)
-		for(int j = 0; j < NUMBEROFCELLSY; j++)
+		for(int j = 0; j < NUMBEROFCELLSY; j++) {
 			picture[i][j] = hippocampus->getFieldType(i, j);
+			if(picture[i][j] == NEURON) {
+				potentialPicture[i][j] = hippocampus->getPotential(i, j);
+				if(potentialPicture[i][j] > maximumPotential) {maximumPotential = potentialPicture[i][j];}
+				if(potentialPicture[i][j] < minimumPotential) {minimumPotential = potentialPicture[i][j];}
+			}
+		}
 
 	for(int x = 0; x < NUMBEROFCELLSX; x++)
 		for(int y = 0; y < NUMBEROFCELLSY; y++)
@@ -327,13 +335,13 @@ void OpenGLInterface::drawNeuronPicture(FigureRectangle rectangle) {
 	getCells();
 	for(int j = 0; j < NUMBEROFCELLSY; j++)
 		for(int i = 0; i < NUMBEROFCELLSX; i++)
-			drawPixel(rectangle, i, j, picture[i][j]);
+			drawPixel(rectangle, i, j, picture[i][j], potentialPicture[i][j]);
 	
 	#ifdef DIFFUSIONVISIBLE
 		for(int type = 0; type < NUMBEROFNEURONTYPES; type++)
 			for(int j = 0; j < NUMBEROFCELLSY; j++)
 				for(int i = 0; i < NUMBEROFCELLSX; i++)
-					drawPixel(rectangle, i, j, ENVIRONMENT, type, environmentField[i][j][type]);
+					drawPixel(rectangle, i, j, ENVIRONMENT, environmentField[i][j][type], type);
 	#endif
 
 	std::string environment;
@@ -349,22 +357,27 @@ void OpenGLInterface::drawNeuronPicture(FigureRectangle rectangle) {
 	PRINTSTATISTICS(ENVIRONMENTSTATISTICSFILEID, environment);
 }
 
-void OpenGLInterface::drawPixel(FigureRectangle rectangle, int x, int y, int type, int environmentType, double intensity) {
+void OpenGLInterface::drawPixel(FigureRectangle rectangle, int x, int y, int type, double intensity, int environmentType) {
     glLoadIdentity();
 	switch(type) {
-	case NOTHING:
+	case NOTHING: {
 		glColor3f(0, 0, 0);
 		return;
 		break;
-	case NEURON:
-		glColor3f(1, 1, 1);
+				  }
+	case NEURON: {
+		float amplitude = (intensity - minimumPotential) / (maximumPotential - minimumPotential);
+		glColor3f(0, 0, amplitude);
 		break;
-	case AXON:
+				 }
+	case AXON: {
 		glColor3f(0, 1, 0);
 		break;
-	case DENDRITE:
+			   }
+	case DENDRITE: {
 		glColor3f(1, 0, 0);
 		break;
+				   }
 	case ENVIRONMENT:
 		switch(environmentType) {
 		case 0:
@@ -417,17 +430,14 @@ void OpenGLInterface::drawPotentialLineChart(FigureRectangle rectangle) {
 void OpenGLInterface::drawLineChart(LineChart &lineChart, FigureRectangle rectangle, int chartIdx) {
 	/* Put coursor back to (0, 0, 0) */
     glLoadIdentity();
-
-	drawArgumentLabels(lineChart.getMinArgument(), lineChart.getMaxActiveArgument(), NUMBEROFXVALUELABELS, rectangle);
-	drawValueLabels(lineChart.getMinValue(), lineChart.getMaxValue(), NUMBEROFYVALUELABELS, rectangle);
-	rectangle.resize(0.9, 0.93);
-
+	
 	double startX = rectangle.getMiddleX() - rectangle.getSizeX() / 2;
 	double startY = rectangle.getMiddleY() - rectangle.getSizeY() / 2;
 	double scaleY = rectangle.getSizeY();
 	double maxValue = lineChart.getMaxValue();
 	double minValue = lineChart.getMinValue();
 
+	double minArgument = lineChart.getMinArgument();
 	for(int j = 0; j < lineChart.getNumberOfCharts(); j++) {
 		if(chartIdx != -1) {j = chartIdx;}
 		int numberOfArguments = lineChart.getMaxActiveArgument(j);
@@ -435,16 +445,27 @@ void OpenGLInterface::drawLineChart(LineChart &lineChart, FigureRectangle rectan
 		glLineWidth(1);
 		Color color = lineChart.getColor(j);
 		glColor3f(color.getRed(), color.getGreen(), color.getBlue());
-		for(int i = 1; i < numberOfArguments; i++) {
+
+		int startArgument = 1;
+		if(numberOfArguments > MAXPOTENTIALPICTUREWIDTH) {
+			startArgument = numberOfArguments - MAXPOTENTIALPICTUREWIDTH;
+			widthStep = rectangle.getSizeX() / MAXPOTENTIALPICTUREWIDTH;
+			minArgument = startArgument;
+		}
+		for(int i = startArgument; i < numberOfArguments; i++) {
 			glBegin(GL_LINES);
-				glVertex3f(startX + (i - 1) * widthStep,
+				glVertex3f(startX + (i - 1 - startArgument) * widthStep,
 				startY + ( lineChart.getValue(j, i - 1) - minValue ) / ( maxValue - minValue ) * scaleY, 0);
-				glVertex3f(startX + i       * widthStep,
+				glVertex3f(startX + (i - startArgument)     * widthStep,
 				startY + ( lineChart.getValue(j, i)     - minValue ) / ( maxValue - minValue ) * scaleY, 0);
 			glEnd();
 		}
 		if(chartIdx != -1) {break;}
 	}
+
+	drawValueLabels(lineChart.getMinValue(), lineChart.getMaxValue(), NUMBEROFYVALUELABELS, rectangle);
+	drawArgumentLabels(minArgument, lineChart.getMaxActiveArgument(), NUMBEROFXVALUELABELS, rectangle);
+	rectangle.resize(0.9, 0.93);
 }
 
 void OpenGLInterface::drawText(const char *text, int length, float x, float y) {
@@ -465,7 +486,7 @@ void OpenGLInterface::drawArgumentLabels(double minArgument, double maxArgument,
 	for(int i = 0; i < numberOfBins; i++) {
 		char bufer[10];
 		_itoa_s(minArgument + delta * i, bufer, 10, 10);
-		drawText(bufer, sizeof(bufer) / sizeof(char), startX + deltaX * i, y);
+		drawText(bufer, sizeof(bufer) / sizeof(char), startX + deltaX * i + 0.04, y);
 	}
 }
 
@@ -478,7 +499,7 @@ void OpenGLInterface::drawValueLabels(double minValue, double maxValue, int numb
 		char bufer[10];
 		int sign = minValue + delta * i;
 		_itoa_s(sign, bufer, 10, 10);
-		drawText(bufer, sizeof(bufer) / sizeof(char), x + 0.02, startY + deltaY * i);
+		drawText(bufer, sizeof(bufer) / sizeof(char), x, startY + deltaY * i);
 	}
 }
 

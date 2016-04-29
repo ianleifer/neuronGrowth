@@ -214,3 +214,8 @@ void Hippocampus::feelPotentialsChart(LineChart &lineChart) {
 int Hippocampus::getFieldType(int x, int y) {
 	return neuronType[x][y];
 }
+
+double Hippocampus::getPotential(int x, int y) {
+	if(neuronType[x][y] == NEURON) {return getNeuronById(neuronIds[x][y])->getPotential();}
+	else {return -1;}
+}

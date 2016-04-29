@@ -34,8 +34,6 @@ void Configurator::setConfigurationPath() {
 	modeFile.close();
 }
 
-//double *connections[3];
-
 void Configurator::readConnectionConfiguration() {
 	std::string line;
 	std::ifstream connectionsConfigurationFile(configurationPath + "connectivityConfiguration.txt");
