@@ -14,6 +14,8 @@ Hippocampus* Hippocampus::getHippocampus() {
 #include <cstdlib>
 
 Hippocampus::Hippocampus() {
+	mode = 0;
+	timer = 0;
 	numberOfNeurons = 0;
 	numberOfSynapses = 0;
 
@@ -153,13 +155,12 @@ void Hippocampus::fireSynapses() {
 void Hippocampus::tick(int t) {
 	ENTER_FUNCTION("hippocampus", "Hippocampus tick");
 	if (numberOfNeurons == 0) {
-
-	#ifdef CONNECTIVITYTEST1
+		#ifdef CONNECTIVITYTEST1
 			addNeuron(NUMBEROFCELLSX/2 - 50, NUMBEROFCELLSY/2);
 			addNeuron(NUMBEROFCELLSX/2 + 50, NUMBEROFCELLSY/2);
-	#else
+		#else
 			addNeuron(NUMBEROFCELLSX/2, NUMBEROFCELLSY/2);
-	#endif
+		#endif
 
 		for (int i = 0; i < MAXNUMBEROFNEURONS; i++) {
 			addNeuron();
@@ -176,15 +177,23 @@ void Hippocampus::tick(int t) {
 				addSynaps(rand()%MAXNUMBEROFNEURONS, rand()%MAXNUMBEROFNEURONS);
 		}
 	}
+	if(timer > configurator->getGrowthEndTimer()) {mode = 1;}
+
+	if(mode == 0) {
 	for(int i = 0; i < numberOfNeurons; i++)
 		neurons[i].tick();
-	fireSynapses();
-	checkStack();
+		checkStack();
+	}
+
+	if(mode == 1) {
+		fireSynapses();
+	}
 
 	#ifdef CONNECTIVITYGRAPHSTATISTICS
 		if( (t % CONNECTIVITYGRAPHSTATISTICSRATE) == 1 ) {printConnectivityGraphStatistics();}
 	#endif
 	//if(numberOfNeurons == 0) {addNeuron(2, 5); addNeuron(2, 15); addNeuron(2, 25); addNeuron(7, 25); addNeuron(3, 25);}
+	timer++;
 }
 
 void Hippocampus::printConnectivityGraphStatistics() {

@@ -9,8 +9,8 @@
 
 #define NUMBEROFDIMENSIONS 2
 
-#define NUMBEROFCELLSX 5
-#define NUMBEROFCELLSY 5
+#define NUMBEROFCELLSX 200
+#define NUMBEROFCELLSY 200
 
 #define WORKTIME 50000
 
@@ -54,8 +54,8 @@
 #define MAXNUMBEROFNEURONS 2
 #endif
 
-//#define AXONGROWTH
-//#define DENDRITEGROWTH
+#define AXONGROWTH
+#define DENDRITEGROWTH
 
 /************************************/
 /*		End of general settings		*/

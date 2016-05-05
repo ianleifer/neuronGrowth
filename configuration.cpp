@@ -10,6 +10,8 @@ Configurator* Configurator::getConfigurator() {
 }
 
 Configurator::Configurator() {
+	growthEndTimer = 3;
+
 	connectionsConfigured = false;
 	readConfiguration();
 }
@@ -83,4 +85,8 @@ int Configurator::getDelay(int connectionNumber) {
 	} else {
 		return -1;
 	}
+}
+
+int Configurator::getGrowthEndTimer() {
+	return growthEndTimer;
 }

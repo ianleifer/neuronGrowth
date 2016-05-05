@@ -10,6 +10,11 @@
 
 class Hippocampus {
 private:
+	/* There are two modes now. Growth and synaptic activity. We are now trying to have growth and then activity.
+	0 - growth
+	1 - activity */
+	int mode;
+	int timer;
 	static Hippocampus *p_Hippocampus;
 	Hippocampus();
 

@@ -28,18 +28,29 @@ private:
 	int *connections[3];
 	/* End of Connection configuration */
 
+	/* Growth and activity configuration */
+	int growthEndTimer;
+	/* End of growth and activity configuration */
+
 	/********************************/
 	/*		End of configuration	*/
 	/********************************/
 public:
 	static Configurator* getConfigurator();
-
-	/* Interface */
+	
+	/********************************/
+	/*			 Interface			*/
+	/********************************/
+	
+	/* Connection configuration */
 	bool areConnectionsConfigured();
 	int getNumberOfConnections();
 	int getSource(int connectionNumber);
 	int getDestination(int connectionNumber);
 	int getDelay(int connectionNumber);
+	/* End of Connection configuration */
+
+	int getGrowthEndTimer();
 };
 
 #endif
