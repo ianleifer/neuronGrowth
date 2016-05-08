@@ -435,12 +435,13 @@ void OpenGLInterface::drawLineChart(LineChart &lineChart, FigureRectangle rectan
 	/* Put coursor back to (0, 0, 0) */
     glLoadIdentity();
 	
+	rectangle.resize(0.9, 0.93);
 	double startX = rectangle.getMiddleX() - rectangle.getSizeX() / 2;
 	double startY = rectangle.getMiddleY() - rectangle.getSizeY() / 2;
 	double scaleY = rectangle.getSizeY();
 	double maxValue = lineChart.getMaxValue();
 	double minValue = lineChart.getMinValue();
-
+	
 	double minArgument = lineChart.getMinArgument();
 	for(int j = 0; j < lineChart.getNumberOfCharts(); j++) {
 		if(chartIdx != -1) {j = chartIdx;}
@@ -466,7 +467,8 @@ void OpenGLInterface::drawLineChart(LineChart &lineChart, FigureRectangle rectan
 		}
 		if(chartIdx != -1) {break;}
 	}
-
+	
+	rectangle.resize(1 / 0.9, 1 / 0.93);
 	drawValueLabels(lineChart.getMinValue(), lineChart.getMaxValue(), NUMBEROFYVALUELABELS, rectangle);
 	drawArgumentLabels(minArgument, lineChart.getMaxActiveArgument(), NUMBEROFXVALUELABELS, rectangle);
 	rectangle.resize(0.9, 0.93);

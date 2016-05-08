@@ -47,6 +47,7 @@ void FigureRectangle::setColor(Color clr) {
 	color = clr;
 }
 
+#include <cmath>
 void FigureRectangle::resize(double scaleX, double scaleY) {
 	sizeX = sizeX * scaleX;
 	sizeY = sizeY * scaleY;
