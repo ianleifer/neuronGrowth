@@ -43,6 +43,7 @@ private:
 
 	Hippocampus* hippocampus;
 	Environment* environment;
+	Configurator *configurator;
 	Output *output;
 	void printPicture();
 	void drawNeuronPicture(FigureRectangle rectangle);

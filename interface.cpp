@@ -19,6 +19,7 @@ OpenGLInterface::OpenGLInterface() {
 
 	hippocampus = hippocampus->getHippocampus();
 	environment = environment->getEnvironment();
+	configurator = configurator->getConfigurator();
 	output = output->getOutput();
 	for(int i = 0; i < NUMBEROFCELLSX; i++)
 		for(int j = 0; j < NUMBEROFCELLSY; j++)
@@ -271,7 +272,6 @@ LRESULT OpenGLInterface::WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPa
 	return DefWindowProc( hWnd, uMsg, wParam, lParam );
 }
 
-
 LRESULT CALLBACK OpenGLInterface::InitialWndProc(HWND hWnd, UINT Msg, WPARAM wParam, LPARAM lParam) {
       if (Msg == WM_NCCREATE) {
         LPCREATESTRUCT create_struct = reinterpret_cast<LPCREATESTRUCT>(lParam);
@@ -315,12 +315,16 @@ void OpenGLInterface::printPicture() {
 	glEnable(GL_ALPHA_TEST);
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_DST_ALPHA);
-
+	
 	FigureRectangle rectangle(-1, -1, 0, 1);
-	drawNeuronPicture(rectangle);
+	if(configurator->getWorkMode() == 0) {
+		drawNeuronPicture(rectangle);
+	}
 
 	rectangle.setFigure(0, -1, 1, 1);
-	drawPotentialLineChart(rectangle);
+	if(configurator->getWorkMode() == 1) {
+		drawPotentialLineChart(rectangle);
+	}
 
 	glDisable(GL_BLEND);
 	glDisable(GL_ALPHA_TEST);

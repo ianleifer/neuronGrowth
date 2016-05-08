@@ -3,6 +3,7 @@
 
 Environment::Environment() {
 	output = output->getOutput();
+	configurator = configurator->getConfigurator();
 	numberOfSources = 0;
 	for(int i = 0; i < NUMBEROFCELLSX; i++)
 		for(int j = 0; j < NUMBEROFCELLSY; j++)
@@ -138,8 +139,10 @@ double Environment::getField(int x, int y, int type) {
 // Every tick growth cones signalize themselves and they become sources for next tick.
 void Environment::tick() {
 	ENTER_FUNCTION("environment", "Environment::tick()");
-	for(int i = 0; i < NUMBEROFNEURONTYPES; i++)
-		solveEquation(i);
+	if(configurator->getWorkMode() == 0) {
+		for(int i = 0; i < NUMBEROFNEURONTYPES; i++)
+			solveEquation(i);
+	}
 
 /*	for(int i = 0; i < NUMBEROFCELLSX; i++)
 		for(int j = 0; j < NUMBEROFCELLSY; j++)

@@ -30,6 +30,7 @@ private:
 
 	/* Growth and activity configuration */
 	int growthEndTimer;
+	int growthMode;
 	/* End of growth and activity configuration */
 
 	/********************************/
@@ -50,7 +51,7 @@ public:
 	int getDelay(int connectionNumber);
 	/* End of Connection configuration */
 
-	int getGrowthEndTimer();
+	int getWorkMode(int timer = -1);
 };
 
 #endif

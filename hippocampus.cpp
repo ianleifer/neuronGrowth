@@ -177,11 +177,11 @@ void Hippocampus::tick(int t) {
 				addSynaps(rand()%MAXNUMBEROFNEURONS, rand()%MAXNUMBEROFNEURONS);
 		}
 	}
-	if(timer > configurator->getGrowthEndTimer()) {mode = 1;}
-
-	if(mode == 0) {
+	mode = configurator->getWorkMode(timer);
+	
 	for(int i = 0; i < numberOfNeurons; i++)
 		neurons[i].tick();
+	if(mode == 0) {
 		checkStack();
 	}
 

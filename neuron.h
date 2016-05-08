@@ -8,6 +8,8 @@
 class Neuron {
 private:
 	Output *output;
+	Environment *environment;
+	Configurator *configurator;
 	int NeuronId;
 	Coordinates coord;
 	int neuronType;

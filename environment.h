@@ -49,6 +49,7 @@ private:
 	Environment();
 	static Environment* p_environment;
 	Output *output;
+	Configurator *configurator;
 
 	int numberOfSources;
 	Coordinates *sources;

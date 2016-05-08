@@ -11,6 +11,8 @@ void Neuron::resetIdCounter() {
 #include <cstdlib>
 Neuron::Neuron() {
 	output = output->getOutput();
+	environment = environment->getEnvironment();
+	configurator = configurator->getConfigurator();
 	timer = 0;
 	ENTER_FUNCTION("neuron", "Neuron::Neuron()");
 	if (NeuronCounter < MAXNUMBEROFNEURONS) {
@@ -130,30 +132,29 @@ void Neuron::solvePotentialEquation() {
 /************************************/
 void Neuron::tick() {
 	ENTER_FUNCTION("neuron", "Neuron::tick(). NeuronId = " + std::to_string(NeuronId));
-	Environment *environment;
-	environment = environment->getEnvironment();
-	environment->addSource(coord, neuronType);
 	solvePotentialEquation();
 	timer++;
-
+	
+	if(configurator->getWorkMode() == 1) {return;}
+	environment->addSource(coord, neuronType);
 	#ifndef CONNECTIVITYTEST1
-	#ifdef AXONGROWTH
-		if(numberOfAxons != 0) {
-			for(int i = 0; i < numberOfAxons; i++)
-				axons[i].tick();
-		} else { 
-			addAxon(coord);
-		}
-	#endif
+		#ifdef AXONGROWTH
+			if(numberOfAxons != 0) {
+				for(int i = 0; i < numberOfAxons; i++)
+					axons[i].tick();
+			} else { 
+				addAxon(coord);
+			}
+		#endif
 
-	#ifdef DENDRITEGROWTH
-		if(numberOfDendrites != 0) {
-			for(int i = 0; i < numberOfDendrites; i++)
-				dendrites[i].tick();
-		} else {
-			addDendrite(coord);
-		}
-	#endif
+		#ifdef DENDRITEGROWTH
+			if(numberOfDendrites != 0) {
+				for(int i = 0; i < numberOfDendrites; i++)
+					dendrites[i].tick();
+			} else {
+				addDendrite(coord);
+			}
+		#endif
 	#else
 		if(NeuronId == 0) {
 			if(numberOfAxons != 0) {

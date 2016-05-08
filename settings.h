@@ -32,7 +32,7 @@
 #define ENTERFUNCTIONTRACES
 //#define CELLSTACKTRACES
 //#define GROWTHCONETRACES
-#define CONNECTIONTRACES
+//#define CONNECTIONTRACES
 //#define BRANCHINGTRACES
 
 #define STATISTICSON
@@ -64,9 +64,15 @@
 /************************************/
 /*			Picture settings		*/
 /************************************/
-
+//#define BIGSCREEN
+#ifdef BIGSCREEN
 #define PICTURESIZEX	1400
 #define PICTURESIZEY	1000
+#else
+#define PICTURESIZEX	800
+#define PICTURESIZEY	600
+#endif
+
 #define PICTURESCALEX	PICTURESIZEX / NUMBEROFCELLSX
 #define PICTURESCALEY	PICTURESIZEY / NUMBEROFCELLSY
 #define ENVIRONMENTINTENSITYMULTIPLIER	10
