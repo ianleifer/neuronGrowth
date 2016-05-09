@@ -13,10 +13,12 @@ Cell& Cell::operator=( Cell &cell ) {
 
 Cell::Cell() {
 	makeEmpty();
+	output = output->getOutput();
 }
 
 Cell::Cell(Coordinates tmpCoordinates, int tmpCellType, int tmpNeuronId, int tmpNeuriteId, int tmpGrowthConeId, int tmpSomaDistance) {
 	makeFull();
+	output = output->getOutput();
 	coordinates  = tmpCoordinates;
 	cellType     = tmpCellType;
 	NeuronId     = tmpNeuronId;
@@ -61,6 +63,7 @@ int Cell::getSomaDistance() {
 	return somaDistance;
 }
 
-void Cell::PrintCoordinates() {
+void Cell::printCell() {
+	PRINTTRACE("Cell", "Type of cell is " + std::to_string(cellType) + ", neuronId is " + std::to_string(NeuronId) + ", growthConeId is " + std::to_string(NeuriteId) + " and coordinates are:");
 	coordinates.PrintCoordinates();
 }

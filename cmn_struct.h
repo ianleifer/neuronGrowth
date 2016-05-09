@@ -2,6 +2,8 @@
 #define CMN_STRUCT_H
 
 #include "coordinates.h"
+#include "output.h"
+#include "cmn_defines.h"
 
 class Cell {
 private:
@@ -13,6 +15,7 @@ private:
 	int NeuriteId;
 	int growthConeId;
 	int somaDistance;
+	Output *output;
 public:
 	Cell();
 	Cell(Coordinates tmpCoordinates, int tmpCellType, int tmpNeuronId, int tmpNeuriteId, int tmpGrowthConeId, int tmpSomaDistance);
@@ -29,7 +32,7 @@ public:
 	int getGrowthConeId();
 	int getSomaDistance();
 
-	void PrintCoordinates();
+	void printCell();
 };
 
 #endif
