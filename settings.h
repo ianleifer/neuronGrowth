@@ -14,7 +14,7 @@
 
 #define WORKTIME 50000
 
-#define MAXNUMBEROFNEURONS 3
+#define MAXNUMBEROFNEURONS 5
 #define MAXNUMBEROFGROWTHCONES 16
 
 #define NUMBEROFNEURONTYPES 2
@@ -69,7 +69,7 @@
 #define PICTURESIZEX	1400
 #define PICTURESIZEY	1000
 #else
-#define PICTURESIZEX	800
+#define PICTURESIZEX	1200
 #define PICTURESIZEY	600
 #endif
 
@@ -94,7 +94,7 @@
 #define LENGTHSTATISTICSFILE  "output/length.txt"
 #define ENVIRONMENTSTATISTICSFILE  "output/environment.txt"
 #define CONNECTIVITYGRAPHSTATISTICSFILE  "output/connectivitygraph.txt"
-#define CONNECTIVITYGRAPHSTATISTICSRATE 100
+#define CONNECTIVITYGRAPHSTATISTICSRATE 10
 
 /************************************/
 /*		End of output file settings	*/
@@ -117,7 +117,7 @@
 #define IzhikevichV0		-60
 #define IzhikevichU0		0
 #define IzhikevichCm		50
-#define IzhikevichNoise		15
+#define IzhikevichNoise		12
 #define IzhikevichG			3
 
 /************************************/

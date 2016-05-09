@@ -11,7 +11,6 @@ private:
 	Neuron *source;
 	Neuron *destination;
 	double delay;
-	//double probability;
 	void transferPerturbation();
 public:
 	Synaps();

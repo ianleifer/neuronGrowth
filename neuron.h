@@ -24,7 +24,7 @@ private:
 	Dendrite *dendrites;
 
 	bool fired;
-	double synapticCurrent;
+	double synapticCurrent[WORKTIME + 1];
 	double neuronPotential[WORKTIME + 1];
 	double Um[WORKTIME + 1];
 	double izhik_Vm();
@@ -43,7 +43,7 @@ public:
 	void pushPotentialToChart(LineChart &lineChart);
 	void tick();
 	void addSynaps();
-	void transferPerturbation(double current = 0);
+	void transferPerturbation(double current, int delay = 0);
 
 	Neuron& operator=(Neuron &neuron);
 	int getNeuronId();

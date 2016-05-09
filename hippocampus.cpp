@@ -55,14 +55,14 @@ void Hippocampus::checkStack() {
 			// Case we need to create a new connection
 			// Axon can be connected to dendrite
 			if(cell.getNeuronId() != neuronIds[x][y] && cell.getCellType() == AXON) {
-				addSynaps(cell.getNeuronId(), neuronIds[x][y]);
+				addSynaps(cell.getNeuronId(), neuronIds[x][y], cell.getSomaDistance());
 			}
 			break;
 		case AXON:
 			// Case we need to create a new connection
 			// Dendrite can be connected to axon
 			if(cell.getNeuronId() != neuronIds[x][y] && cell.getCellType() == DENDRITE) {
-				addSynaps(neuronIds[x][y], cell.getNeuronId());
+				addSynaps(neuronIds[x][y], cell.getNeuronId(), cell.getSomaDistance());
 			}
 			break;
 		}
@@ -138,7 +138,7 @@ void Hippocampus::addSynaps(int sourceId, int destinationId, double delay) {
 	Neuron *destination = getNeuronById(destinationId);
 	if(numberOfSynapses != 0) {dynamicArrayRealloc(Synaps, synapses, numberOfSynapses);}
 	else {synapses = new Synaps; numberOfSynapses++;}
-	synapses[numberOfSynapses - 1].Set(source, destination, delay);
+	synapses[numberOfSynapses - 1].Set(source, destination, delay * 10);
 	source->addSynaps();
 	PRINTTRACETG("hippocampus", "Added new synaps between neuron " + std::to_string(source->getNeuronId()) + " and neuron " + std::to_string(destination->getNeuronId()), TG(3));
 }
@@ -172,9 +172,6 @@ void Hippocampus::tick(int t) {
 		if(configurator->areConnectionsConfigured()) {
 			for(int i = 0; i < configurator->getNumberOfConnections(); i++)
 				addSynaps(configurator->getSource(i), configurator->getDestination(i), configurator->getDelay(i));
-		} else {
-			for(int i = 0; i < MAXNUMBEROFNEURONS; i++)
-				addSynaps(rand()%MAXNUMBEROFNEURONS, rand()%MAXNUMBEROFNEURONS);
 		}
 	}
 	mode = configurator->getWorkMode(timer);

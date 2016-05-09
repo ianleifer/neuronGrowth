@@ -31,9 +31,13 @@ Neuron::Neuron() {
 
 	numberOfSynapses = 0;
 
+	for(int i = 0; i < WORKTIME; i++) {
+		neuronPotential[i] = 0;
+		Um[i] = 0;
+		synapticCurrent[i] = 0;
+	}
 	neuronPotential[0]	= IzhikevichV0;
 	Um[0]				= IzhikevichU0;
-	synapticCurrent = 0;
 	fired = false;
 
 	PRINTTRACE("neuron", "Neuron with id " + std::to_string(NeuronId) + " was created");
@@ -95,7 +99,7 @@ double Neuron::izhik_Vm(){
 	double Vt	= IzhikevichVt;
 	double Iex	= IzhikevichIex;
 	double Cm	= IzhikevichCm;
-	return (k*(neuronPotential[timer] - Vr)*(neuronPotential[timer] - Vt) - Um[timer] + Iex + synapticCurrent)/Cm;
+	return (k*(neuronPotential[timer] - Vr)*(neuronPotential[timer] - Vt) - Um[timer] + Iex + synapticCurrent[timer])/Cm;
 }
  
 double Neuron::izhik_Um(){
@@ -124,7 +128,7 @@ void Neuron::solvePotentialEquation() {
 		Um[timer + 1] = Um[timer] + d;
 		fired = true;
 	}
-	synapticCurrent = 0;
+	//synapticCurrent[0] = 0;
 }
 
 /************************************/
@@ -178,8 +182,8 @@ void Neuron::addSynaps() {
 	numberOfSynapses++;
 }
 
-void Neuron::transferPerturbation(double current) {
-	synapticCurrent += current;
+void Neuron::transferPerturbation(double current, int delay) {
+	synapticCurrent[timer + delay] += current;
 }
 
 Neuron& Neuron::operator=(Neuron &neuron) {

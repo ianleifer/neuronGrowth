@@ -18,7 +18,7 @@ void Synaps::transferPerturbation() {
 	double sourcePotential = source->getPotential();
 	double destinationPotential = destination->getPotential();
 	double current = g * ( sourcePotential - destinationPotential );
-	destination->transferPerturbation(current);
+	destination->transferPerturbation(current, int(delay));
 }
 
 void Synaps::tick() {
