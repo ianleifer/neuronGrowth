@@ -11,11 +11,10 @@ CellStack::CellStack() {
 	ENTER_FUNCTION("cellStack", "CellStack::CellStack()");
 	PRINTTRACETG("cellStack", "Cell stack created", TG(4));
 	numberOfCells = 0;
-	cells = new Cell[numberOfCells];
+	first = NULL;
 };
 
 CellStack::~CellStack() {
-	delete [] cells;
 };
 
 CellStack* CellStack::getStack() {
@@ -26,65 +25,41 @@ CellStack* CellStack::getStack() {
 
 int CellStack::stackPush(Cell cell) {
 	ENTER_FUNCTION("cellStack", "stackPush()");
-	if (numberOfCells < CELLSTACKMAXNUMBEROFCELLS) {
-		Cell *tmpCells;
-
-		tmpCells = new Cell[numberOfCells];
-
-		for(int i = 0; i < numberOfCells; i++) {
-			tmpCells[i] = cells[i];
-		}
-
-		delete [] cells;
-
-		cells = new Cell[++numberOfCells];
-
-		for(int i = 0; i < numberOfCells - 1; i++) {
-			cells[i] = tmpCells[i];
-		}
-
-		delete [] tmpCells;
-
-		cells[numberOfCells - 1] = cell;
-
-		PRINTTRACETG("cellStack", "New element successfully pushed. Stack now has " + std::to_string(numberOfCells) + " elements", TG(4));
-		cell.PrintCoordinates();
-
-		return 0;
+	if(numberOfCells >= CELLSTACKMAXNUMBEROFCELLS) {
+		ERRORTRACE("cellStack", "Can`t push to stack max number of elements exceeded");
+		return 1;
 	}
-	ERRORTRACE("cellStack", "Can`t push to stack max number of elements exceeded");
-	return 1;
+	Node* newNode = new Node;
+	newNode->cell = cell;
+	
+	if(first != NULL) {
+		newNode->next = first;
+	} else {
+		newNode->next = NULL;
+	}
+	first = newNode;
+	numberOfCells++;
+
+	PRINTTRACETG("cellStack", "New element successfully pushed. Stack now has " + std::to_string(numberOfCells) + " elements", TG(4));
+	cell.PrintCoordinates();
+	return 0;
 };
 
 Cell CellStack::stackPop() {
 	ENTER_FUNCTION("cellStack", "stackPull()");
 	Cell cell;
 	cell.makeEmpty();
+	if(isEmpty()) {return cell;}
 
-	if (!isEmpty()) {
-		cell = cells[numberOfCells - 1];
+	cell = first->cell;
 
-		Cell *tmpCells;
-
-		tmpCells = new Cell[--numberOfCells];
-
-		for(int i = 0; i < numberOfCells; i++) {
-			tmpCells[i] = cells[i];
-		}
-
-		delete [] cells;
-
-		cells = new Cell[numberOfCells];
-
-		for(int i = 0; i < numberOfCells; i++) {
-			cells[i] = tmpCells[i];
-		}
-
-		delete [] tmpCells;
-
-		PRINTTRACETG("cellStack", "element successfully pulled from stack. Stack now has " + std::to_string(numberOfCells) + " elements", TG(4));
-		cell.PrintCoordinates();
-	}
+	Node* newFirst = first->next;
+	delete [] first;
+	first = newFirst;
+	numberOfCells--;
+	
+	PRINTTRACETG("cellStack", "element successfully pulled from stack. Stack now has " + std::to_string(numberOfCells) + " elements", TG(4));
+	cell.PrintCoordinates();
 	return cell;
 };
 
@@ -100,7 +75,7 @@ void CellStack::PrintStack() {
 	ENTER_FUNCTION("cellStack", "PrintStack");
 	for(int i = 0; i < numberOfCells; i++) {
 		//TRACE("cellStack", "");
-		PRINTTRACE("cellStack", "Type of element " + std::to_string(i) + " is " + std::to_string(cells[i].getCellType()) + ", neuronId is " + std::to_string(cells[i].getNeuronId()) + ", growthConeId is " + std::to_string(cells[i].getGrowthConeId()) + " and coordinates are:");
-		cells[i].PrintCoordinates();
+	//	PRINTTRACE("cellStack", "Type of element " + std::to_string(i) + " is " + std::to_string(cells[i].getCellType()) + ", neuronId is " + std::to_string(cells[i].getNeuronId()) + ", growthConeId is " + std::to_string(cells[i].getGrowthConeId()) + " and coordinates are:");
+	//	cells[i].PrintCoordinates();
 	}
 };

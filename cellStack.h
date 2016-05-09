@@ -4,12 +4,17 @@
 #include "cmn_struct.h"
 #include "output.h"
 
+struct Node {
+    Cell cell;
+    Node* next;
+};
+
 class CellStack {
 private:
 	static CellStack *p_CellStack;
 	Output *output;
 	int numberOfCells;
-	Cell *cells;
+	Node *first;
 public:
 	CellStack();
 	~CellStack();
