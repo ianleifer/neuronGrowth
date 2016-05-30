@@ -10,7 +10,7 @@ Configurator* Configurator::getConfigurator() {
 }
 
 Configurator::Configurator() {
-	growthEndTimer = 10;
+	growthEndTimer = 0;
 	growthMode = 0;
 
 	connectionsConfigured = false;

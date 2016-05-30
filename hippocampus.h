@@ -37,7 +37,6 @@ private:
 	void fireSynapses();
 	void fillField(int x, int y, char type, int neuronId);
 	void createNeuron();
-	Neuron* getNeuronById(int neuronId);
 public:
 	~Hippocampus();
 	static Hippocampus* getHippocampus();
@@ -45,6 +44,7 @@ public:
 	double getPotential(int x, int y);
 	int getNumberOfSynapses();
 	Synaps getSynaps(int idx);
+	Neuron* getNeuronById(int neuronId);
 	void printConnectivityGraphStatistics();
 	void feelPotentialsChart(LineChart &lineChart);
 	void tick(int t);

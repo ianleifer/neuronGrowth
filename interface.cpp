@@ -438,14 +438,18 @@ void OpenGLInterface::printConnections(FigureRectangle rectangle) {
 	double scaleY = rectangle.getSizeY() / 2;
 	
 	/* Draw neurons image */
-	double radius = 0.05;
-	double bigRadius = 0.75;
+	double radius = 0.02;
+	double bigRadius = 0.85;
 	double deltaAngle = 2 * M_PI / MAXNUMBEROFNEURONS;
-	glColor3f(0, 0, 1);
+	double startNeuronColor = 0.6;
+	double deltaNeuronColor = 1 - startNeuronColor;
 	for(int i = 0; i < MAXNUMBEROFNEURONS; i++) {
 		double X = GETX(i);
 		double Y = GETY(i);
 		glLoadIdentity();
+		double instantPotential = hippocampus->getNeuronById(i)->getPotential();
+		double colorAmplitude = - (instantPotential - minimumPotential) / (maximumPotential - minimumPotential);
+		glColor3f(0, 0, startNeuronColor + colorAmplitude);
 		glTranslatef(X, Y, 0.0);
 		glutWireSphere(radius, 45, 10);
 	}
@@ -465,7 +469,7 @@ void OpenGLInterface::printConnections(FigureRectangle rectangle) {
 		glEnd();
 	
 		double alpha = M_PI / 12;
-		double d = 0.05;
+		double d = 0.02;
 		double a = atan( (y2 - y1) / (x2 - x1) );
 		double betta = (x2 < x1) ? a : M_PI + a;
 		if(x2 == x1 && y2 > y1) {betta = - M_PI / 2;}
