@@ -24,6 +24,8 @@ OpenGLInterface::OpenGLInterface() {
 	for(int i = 0; i < NUMBEROFCELLSX; i++)
 		for(int j = 0; j < NUMBEROFCELLSY; j++)
 			picture[i][j] = NOTHING;
+
+	numberOfSynapses = 0;
 }
 
 OpenGLInterface* OpenGLInterface::getOpenGLInterface() {
@@ -290,7 +292,8 @@ LRESULT CALLBACK OpenGLInterface::StaticWndProc(HWND hWnd, UINT Msg, WPARAM wPar
       return this_window->WndProc(hWnd, Msg, wParam, lParam);
 }
 
-void OpenGLInterface::getCells() {
+void OpenGLInterface::getData() {
+	/* Get neurons types, coordinates and potentials */
 	minimumPotential = IzhikevichVpeak;
 	maximumPotential = IzhikevichV0 - 100;
 	for(int i = 0; i < NUMBEROFCELLSX; i++)
@@ -303,10 +306,19 @@ void OpenGLInterface::getCells() {
 			}
 		}
 
+	/* Get environment information */
 	for(int x = 0; x < NUMBEROFCELLSX; x++)
 		for(int y = 0; y < NUMBEROFCELLSY; y++)
 			for(int type = 0; type < NUMBEROFNEURONTYPES; type++)
 				environmentField[x][y][type] = environment->getField(x, y, type);
+
+	/* Get synaptic information */
+	if(numberOfSynapses != 0) {delete [] synapses;}
+	numberOfSynapses = hippocampus->getNumberOfSynapses();
+	synapses = new Synaps[numberOfSynapses];
+	for(int i = 0; i < numberOfSynapses; i++) {
+		synapses[i] = hippocampus->getSynaps(i);
+	}
 }
 
 void OpenGLInterface::printPicture() {
@@ -318,11 +330,14 @@ void OpenGLInterface::printPicture() {
 	
 	FigureRectangle rectangle(-1, -1, 0, 1);
 	if(configurator->getWorkMode() == 0) {
+		rectangle.setFigure(-1, -1, 0, 1);
 		drawNeuronPicture(rectangle);
-	}
-
-	rectangle.setFigure(0, -1, 1, 1);
-	if(configurator->getWorkMode() == 1) {
+		rectangle.setFigure(0, -1, 1, 1);
+		printConnections(rectangle);
+	} else {
+		rectangle.setFigure(-1, -1, 0, 1);
+		printConnections(rectangle);
+		rectangle.setFigure(0, -1, 1, 1);
 		drawPotentialLineChart(rectangle);
 	}
 
@@ -336,7 +351,7 @@ void OpenGLInterface::printPicture() {
 }
 
 void OpenGLInterface::drawNeuronPicture(FigureRectangle rectangle) {
-	getCells();
+	getData();
 	for(int j = 0; j < NUMBEROFCELLSY; j++)
 		for(int i = 0; i < NUMBEROFCELLSX; i++)
 			drawPixel(rectangle, i, j, picture[i][j], potentialPicture[i][j]);
@@ -410,6 +425,57 @@ void OpenGLInterface::drawPixel(FigureRectangle rectangle, int x, int y, int typ
 		glVertex2f(halfSizeX, -halfSizeY);
 		glVertex2f(-halfSizeX,-halfSizeY);
 	glEnd();
+}
+
+#define _USE_MATH_DEFINES
+#include <math.h>
+#define GETX(n) (startX + bigRadius * cos(deltaAngle * n) * scaleX)
+#define GETY(n) (startY + bigRadius * sin(deltaAngle * n) * scaleY)
+void OpenGLInterface::printConnections(FigureRectangle rectangle) {	
+	double startX = rectangle.getMiddleX();
+	double startY = rectangle.getMiddleY();
+	double scaleX = rectangle.getSizeX() / 2;
+	double scaleY = rectangle.getSizeY() / 2;
+	
+	/* Draw neurons image */
+	double radius = 0.05;
+	double bigRadius = 0.75;
+	double deltaAngle = 2 * M_PI / MAXNUMBEROFNEURONS;
+	glColor3f(0, 0, 1);
+	for(int i = 0; i < MAXNUMBEROFNEURONS; i++) {
+		double X = GETX(i);
+		double Y = GETY(i);
+		glLoadIdentity();
+		glTranslatef(X, Y, 0.0);
+		glutWireSphere(radius, 45, 10);
+	}
+	
+	/* Draw synapses */
+	glColor3f(1, 1, 1);
+	glLineWidth(1);
+	glLoadIdentity();
+	for(int i = 0; i < numberOfSynapses; i++) {
+		glBegin(GL_LINES);
+			double x1 = GETX(synapses[i].getSource()->getNeuronId());
+			double y1 = GETY(synapses[i].getSource()->getNeuronId());
+			double x2 = GETX(synapses[i].getDestination()->getNeuronId());
+			double y2 = GETY(synapses[i].getDestination()->getNeuronId());
+			glVertex2d(x1, y1);
+			glVertex2d(x2, y2);
+		glEnd();
+	
+		double alpha = M_PI / 12;
+		double d = 0.05;
+		double a = atan( (y2 - y1) / (x2 - x1) );
+		double betta = (x2 < x1) ? a : M_PI + a;
+		if(x2 == x1 && y2 > y1) {betta = - M_PI / 2;}
+		if(x2 == x1 && y2 < y1) {betta = M_PI / 2;}
+		glBegin(GL_TRIANGLES);
+			glVertex2d(x2 + d * cos(betta + alpha), y2 + d * sin(betta + alpha));
+			glVertex2d(x2, y2);
+			glVertex2d(x2 + d * cos(betta - alpha), y2 + d * sin(betta - alpha));
+		glEnd();
+	}
 }
 
 void OpenGLInterface::drawPotentialLineChart(FigureRectangle rectangle) {

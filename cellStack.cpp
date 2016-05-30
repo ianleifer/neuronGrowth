@@ -2,8 +2,6 @@
 #include "cmn_struct.h"
 #include "cmn_defines.h"
 
-#define CELLSTACKMAXNUMBEROFCELLS ( NUMBEROFCELLSX * NUMBEROFCELLSY / 4 )
-
 CellStack* CellStack::p_CellStack = 0;
 
 CellStack::CellStack() {

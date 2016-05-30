@@ -12,10 +12,12 @@
 #define NUMBEROFCELLSX 200
 #define NUMBEROFCELLSY 200
 
+#define CELLSTACKMAXNUMBEROFCELLS ( NUMBEROFCELLSX * NUMBEROFCELLSY / 4 )
+
 #define WORKTIME 50000
 
-#define MAXNUMBEROFNEURONS 5
-#define MAXNUMBEROFGROWTHCONES 16
+#define MAXNUMBEROFNEURONS 10
+#define MAXNUMBEROFGROWTHCONES 4
 
 #define NUMBEROFNEURONTYPES 2
 #define INTERACTION00 ( 0.0 )
@@ -117,8 +119,8 @@
 #define IzhikevichV0		-60
 #define IzhikevichU0		0
 #define IzhikevichCm		50
-#define IzhikevichNoise		12
-#define IzhikevichG			3
+#define IzhikevichNoise		9
+#define IzhikevichG			1
 
 /************************************/
 /*End of Izhikevich model constants	*/

@@ -128,7 +128,6 @@ void Neuron::solvePotentialEquation() {
 		Um[timer + 1] = Um[timer] + d;
 		fired = true;
 	}
-	//synapticCurrent[0] = 0;
 }
 
 /************************************/

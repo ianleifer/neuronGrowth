@@ -158,8 +158,6 @@ void Hippocampus::tick(int t) {
 		#ifdef CONNECTIVITYTEST1
 			addNeuron(NUMBEROFCELLSX/2 - 50, NUMBEROFCELLSY/2);
 			addNeuron(NUMBEROFCELLSX/2 + 50, NUMBEROFCELLSY/2);
-		#else
-			addNeuron(NUMBEROFCELLSX/2, NUMBEROFCELLSY/2);
 		#endif
 
 		for (int i = 0; i < MAXNUMBEROFNEURONS; i++) {
@@ -224,4 +222,12 @@ int Hippocampus::getFieldType(int x, int y) {
 double Hippocampus::getPotential(int x, int y) {
 	if(neuronType[x][y] == NEURON) {return getNeuronById(neuronIds[x][y])->getPotential();}
 	else {return -1;}
+}
+
+int Hippocampus::getNumberOfSynapses() {
+	return numberOfSynapses;
+}
+
+Synaps Hippocampus::getSynaps(int idx) {
+	return synapses[idx];
 }

@@ -43,6 +43,8 @@ public:
 	static Hippocampus* getHippocampus();
 	int getFieldType(int x, int y);
 	double getPotential(int x, int y);
+	int getNumberOfSynapses();
+	Synaps getSynaps(int idx);
 	void printConnectivityGraphStatistics();
 	void feelPotentialsChart(LineChart &lineChart);
 	void tick(int t);

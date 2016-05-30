@@ -9,6 +9,7 @@
 #include "output.h"
 #include "chart.h"
 #include "interfaceClasses.h"
+#include "synaps.h"
 
 class OpenGLInterface {
 private:
@@ -39,7 +40,9 @@ private:
 	double minimumPotential;
 	double maximumPotential;
 	double environmentField[NUMBEROFCELLSX][NUMBEROFCELLSY][NUMBEROFNEURONTYPES];
-	void getCells();
+	int numberOfSynapses;
+	Synaps *synapses;
+	void getData();
 
 	Hippocampus* hippocampus;
 	Environment* environment;
@@ -47,9 +50,10 @@ private:
 	Output *output;
 	void printPicture();
 	void drawNeuronPicture(FigureRectangle rectangle);
-	void drawPixel(FigureRectangle rectangle, int x, int y, int type, double intensity = -1, int environmentType = -1);
-
 	void drawPotentialLineChart(FigureRectangle rectangle);
+	void printConnections(FigureRectangle rectangle);
+	
+	void drawPixel(FigureRectangle rectangle, int x, int y, int type, double intensity = -1, int environmentType = -1);
 	void drawText(const char *text, int length, float x, float y);
 	void drawArgumentLabels(double minArgument, double maxArgument, int numberOfBins, FigureRectangle rectangle);
 	void drawValueLabels(double minValue, double maxValue, int numberOfBins, FigureRectangle rectangle);
